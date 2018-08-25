@@ -10,6 +10,9 @@ let package = Package(
             targets: ["CalcLang"]),
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/dmulholland/janus-swift.git",
+            from: "0.5.0"),
     ],
     targets: [
         .target(
@@ -17,7 +20,7 @@ let package = Package(
             dependencies: []),
         .target(
             name: "TermCalc",
-            dependencies: ["CalcLang"]),
+            dependencies: ["CalcLang", "Janus"]),
         .testTarget(
             name: "CalcLangTests",
             dependencies: ["CalcLang"]),

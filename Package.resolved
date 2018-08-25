@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Janus",
+        "repositoryURL": "https://github.com/dmulholland/janus-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "73b863f7bb0f94845422bef6cf2f379e96a95768",
+          "version": "0.6.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
