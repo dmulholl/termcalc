@@ -1,8 +1,17 @@
 
+enum Err: Error, Equatable {
 
-enum Err: Error {
-    case scanError(offset: Int, char: Character)
-    case parseError(offset: Int, lexeme: String, message: String)
+    // Scanner errors.
+    case invalidCharacter(offset: Int, char: Character)
+
+    // Parser errors.
+    case unexpectedToken(offset: Int, lexeme: String)
+    case illegalAssignment(offset: Int, lexeme: String)
+    case unparsableLiteral(offset: Int, lexeme: String)
+    case expectExpression(offset: Int, lexeme: String)
+    case expectToken(offset: Int, lexeme: String, expected: String)
+
+    // Interpreter errors.
     case divByZero(offset: Int)
     case undefinedVariable(offset: Int, lexeme: String)
 }

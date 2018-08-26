@@ -72,4 +72,48 @@ final class ParserTests: XCTestCase {
         let string = ExprPrinter().stringify(expr)
         XCTAssertEqual(string, "(* (+ 1.0 2.0) 3.0)")
     }
+
+    func testUnexpectedTokenError() {
+        let scanner = Scanner("1 + 2 3")
+        let tokens = try! scanner.scan()
+        let parser = Parser(tokens)
+        XCTAssertThrowsError(try parser.parse()) { error in
+            guard case Err.unexpectedToken = error else {
+                return XCTFail()
+            }
+        }
+    }
+
+    func testIllegalAssignmentError() {
+        let scanner = Scanner("1 = 2")
+        let tokens = try! scanner.scan()
+        let parser = Parser(tokens)
+        XCTAssertThrowsError(try parser.parse()) { error in
+            guard case Err.illegalAssignment = error else {
+                return XCTFail()
+            }
+        }
+    }
+
+    func testExpectExpressionError() {
+        let scanner = Scanner("1 + *")
+        let tokens = try! scanner.scan()
+        let parser = Parser(tokens)
+        XCTAssertThrowsError(try parser.parse()) { error in
+            guard case Err.expectExpression = error else {
+                return XCTFail()
+            }
+        }
+    }
+
+    func testExpectTokenError() {
+        let scanner = Scanner("(1")
+        let tokens = try! scanner.scan()
+        let parser = Parser(tokens)
+        XCTAssertThrowsError(try parser.parse()) { error in
+            guard case Err.expectToken = error else {
+                return XCTFail()
+            }
+        }
+    }
 }

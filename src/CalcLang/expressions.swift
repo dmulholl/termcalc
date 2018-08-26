@@ -1,8 +1,8 @@
 
-public class Expr {}
+class Expr {}
 
 
-public class BinaryExpr: Expr {
+class BinaryExpr: Expr {
     let leftexpr: Expr
     let optoken: Token
     let rightexpr: Expr
@@ -15,7 +15,7 @@ public class BinaryExpr: Expr {
 }
 
 
-public class UnaryExpr: Expr {
+class UnaryExpr: Expr {
     let optoken: Token
     let rightexpr: Expr
 
@@ -26,7 +26,7 @@ public class UnaryExpr: Expr {
 }
 
 
-public class GroupingExpr: Expr {
+class GroupingExpr: Expr {
     let expr: Expr
 
     init(_ expr: Expr) {
@@ -36,7 +36,7 @@ public class GroupingExpr: Expr {
 
 
 
-public class LiteralExpr: Expr {
+class LiteralExpr: Expr {
     let value: Double
 
     init(_ value: Double) {
@@ -45,7 +45,7 @@ public class LiteralExpr: Expr {
 }
 
 
-public class VariableExpr: Expr {
+class VariableExpr: Expr {
     let name: Token
 
     init(_ name: Token) {

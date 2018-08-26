@@ -28,11 +28,16 @@ public class Interpreter {
     }
 
     func stringify(_ value: Double) -> String {
-        var str = String(format: "%.\(precision)f", value)
-        while str.count > 1 && (str.hasSuffix("0") || str.hasSuffix(".")) {
-            _ = str.removeLast()
+        var string = String(format: "%.\(precision)f", value)
+        if string.contains(".") {
+            while string.hasSuffix("0") {
+                _ = string.removeLast()
+            }
+            if string.hasSuffix(".") {
+                _ = string.removeLast()
+            }
         }
-        return str
+        return string
     }
 
     func eval(_ expr: Expr) throws -> Double {

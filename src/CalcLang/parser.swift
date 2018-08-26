@@ -13,10 +13,9 @@ class Parser {
         let expr = try expression()
         if !isAtEnd() {
             let token = next()
-            throw Err.parseError(
+            throw Err.unexpectedToken(
                 offset: token.offset,
-                lexeme: token.lexeme,
-                message: "unexpected input"
+                lexeme: token.lexeme
             )
         }
         return expr
@@ -38,10 +37,9 @@ class Parser {
             if let leftexpr = expr as? VariableExpr {
                 return AssignExpr(leftexpr.name, optoken, rightexpr)
             } else {
-                throw Err.parseError(
+                throw Err.illegalAssignment(
                     offset: optoken.offset,
-                    lexeme: optoken.lexeme,
-                    message: "can only assign to a variable"
+                    lexeme: optoken.lexeme
                 )
             }
         }
@@ -89,25 +87,23 @@ class Parser {
             if let value = Double(token.lexeme) {
                 return LiteralExpr(value)
             } else {
-                throw Err.parseError(
+                throw Err.unparsableLiteral(
                     offset: token.offset,
-                    lexeme: token.lexeme,
-                    message: "cannot parse as number"
+                    lexeme: token.lexeme
                 )
             }
         } else if match(.leftparen) {
             let _ = next()
             let expr = try expression()
-            try consume(.rightparen, "expect ')'")
+            try consume(.rightparen, ")")
             return GroupingExpr(expr)
         } else if match(.identifier) {
             return VariableExpr(next())
         }
         let token = next()
-        throw Err.parseError(
+        throw Err.expectExpression(
             offset: token.offset,
-            lexeme: token.lexeme,
-            message: "expect expression"
+            lexeme: token.lexeme
         )
     }
 
@@ -144,15 +140,15 @@ class Parser {
         }
     }
 
-    private func consume(_ type: TokenType, _ message: String) throws {
+    private func consume(_ type: TokenType, _ literal: String) throws {
         if match(type) {
             _ = next()
         } else {
             let token = next()
-            throw Err.parseError(
+            throw Err.expectToken(
                 offset: token.offset,
                 lexeme: token.lexeme,
-                message: message
+                expected: literal
             )
         }
     }

@@ -141,8 +141,12 @@ final class ScannerTests: XCTestCase {
         XCTAssertEqual(tokens, expect)
     }
 
-    func testSingleInvalidCharacter() {
+    func testInvalidCharacterError() {
         let scanner = Scanner("&")
-        XCTAssertThrowsError(try scanner.scan())
+        XCTAssertThrowsError(try scanner.scan()) { error in
+            guard case Err.invalidCharacter = error else {
+                return XCTFail()
+            }
+        }
     }
 }

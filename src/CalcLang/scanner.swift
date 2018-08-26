@@ -1,5 +1,4 @@
 
-
 class Scanner {
     private let source: [Character]
     private var start = 0
@@ -88,10 +87,7 @@ class Scanner {
         }
 
         else {
-            throw Err.scanError(
-                offset: current - 1,
-                char: char
-            )
+            throw Err.invalidCharacter(offset: current - 1, char: char)
         }
     }
 
