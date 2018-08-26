@@ -1,47 +1,16 @@
 
-struct Token {
-    let type: TokenType
-    let lexeme: String
-    let offset: Int
-}
 
-
-extension Token: Equatable {
-    static func ==(lhs: Token, rhs: Token) -> Bool {
-        return
-            lhs.type == rhs.type &&
-            lhs.lexeme == rhs.lexeme &&
-            lhs.offset == rhs.offset
-    }
-}
-
-
-enum TokenType {
-    case leftparen, rightparen, comma
-    case plus, minus, star, slash, modulo, caret, equal
-    case plusequal, minusequal, starequal, slashequal, moduloequal, caretequal
-    case identifier, integer, float
-    case setkeyword
-    case eof
-}
-
-
-let keywords = [
-    "set": TokenType.setkeyword,
-]
-
-
-struct Scanner {
+class Scanner {
     private let source: [Character]
     private var start = 0
     private var current = 0
     private var tokens = [Token]()
 
-    init(source: String) {
+    init(_ source: String) {
         self.source = Array(source)
     }
 
-    mutating func scan() throws -> [Token] {
+    func scan() throws -> [Token] {
         while !isAtEnd() {
             start = current
             try readNextToken()
@@ -50,7 +19,7 @@ struct Scanner {
         return tokens
     }
 
-    private mutating func readNextToken() throws {
+    private func readNextToken() throws {
         let char = next()
 
         // Single-character tokens.
@@ -119,9 +88,9 @@ struct Scanner {
         }
 
         else {
-            throw LangError.scanError(
-                invalidCharacter: char,
-                offset: current - 1
+            throw Err.scanError(
+                offset: current - 1,
+                char: char
             )
         }
     }
@@ -130,19 +99,19 @@ struct Scanner {
         return current >= source.count
     }
 
-    private mutating func next() -> Character {
+    private func next() -> Character {
         current += 1
         return source[current - 1]
     }
 
-    private mutating func addToken(type: TokenType) {
+    private func addToken(type: TokenType) {
         let begin = source.index(source.startIndex, offsetBy: start)
         let end = source.index(source.startIndex, offsetBy: current)
         let lexeme = String(source[begin..<end])
         tokens.append(Token(type: type, lexeme: lexeme, offset: start))
     }
 
-    private mutating func match(_ char: Character) -> Bool {
+    private func match(_ char: Character) -> Bool {
         if isAtEnd() {
             return false
         }
@@ -153,7 +122,7 @@ struct Scanner {
         return true
     }
 
-    private mutating func readNumber() {
+    private func readNumber() {
         while true {
             if isAtEnd() || !String(peek()!).isDigit() {
                 break
@@ -190,7 +159,7 @@ struct Scanner {
         return source[current + 1]
     }
 
-    private mutating func readIdentifier() {
+    private func readIdentifier() {
         while true {
             if isAtEnd() || !String(peek()!).isAlphanumeric() {
                 break

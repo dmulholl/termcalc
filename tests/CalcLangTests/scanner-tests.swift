@@ -4,7 +4,7 @@ import XCTest
 final class ScannerTests: XCTestCase {
 
     func testEmptyString() {
-        var scanner = Scanner(source: "")
+        let scanner = Scanner("")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .eof, lexeme: "", offset: 0),
@@ -13,7 +13,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testSingleCharacterString() {
-        var scanner = Scanner(source: "=")
+        let scanner = Scanner("=")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .equal, lexeme: "=", offset: 0),
@@ -23,7 +23,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testDoubleCharacterString() {
-        var scanner = Scanner(source: "()")
+        let scanner = Scanner("()")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .leftparen, lexeme: "(", offset: 0),
@@ -34,7 +34,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testPlusMinuString() {
-        var scanner = Scanner(source: "+-")
+        let scanner = Scanner("+-")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .plus, lexeme: "+", offset: 0),
@@ -45,7 +45,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testPlusEqualsString() {
-        var scanner = Scanner(source: "+=")
+        let scanner = Scanner("+=")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .plusequal, lexeme: "+=", offset: 0),
@@ -55,7 +55,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testAllWhitespace() {
-        var scanner = Scanner(source: " \t")
+        let scanner = Scanner(" \t")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .eof, lexeme: "", offset: 2),
@@ -64,7 +64,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testPartialWhitespace() {
-        var scanner = Scanner(source: " = ")
+        let scanner = Scanner(" = ")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .equal, lexeme: "=", offset: 1),
@@ -74,7 +74,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testInteger() {
-        var scanner = Scanner(source: "123")
+        let scanner = Scanner("123")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .integer, lexeme: "123", offset: 0),
@@ -84,7 +84,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testFloat() {
-        var scanner = Scanner(source: "123.456")
+        let scanner = Scanner("123.456")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .float, lexeme: "123.456", offset: 0),
@@ -94,7 +94,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testKeyword() {
-        var scanner = Scanner(source: "set")
+        let scanner = Scanner("set")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .setkeyword, lexeme: "set", offset: 0),
@@ -104,7 +104,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testIdentifier() {
-        var scanner = Scanner(source: "foo")
+        let scanner = Scanner("foo")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .identifier, lexeme: "foo", offset: 0),
@@ -114,7 +114,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testIntegerExpression() {
-        var scanner = Scanner(source: "1 + 2 * 33")
+        let scanner = Scanner("1 + 2 * 33")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .integer, lexeme: "1", offset: 0),
@@ -128,7 +128,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testFloatingPointExpression() {
-        var scanner = Scanner(source: "1.2 + 22.34 * 33.456")
+        let scanner = Scanner("1.2 + 22.34 * 33.456")
         let tokens = try! scanner.scan()
         let expect = [
             Token(type: .float, lexeme: "1.2", offset: 0),
@@ -142,7 +142,7 @@ final class ScannerTests: XCTestCase {
     }
 
     func testSingleInvalidCharacter() {
-        var scanner = Scanner(source: "&")
+        let scanner = Scanner("&")
         XCTAssertThrowsError(try scanner.scan())
     }
 
