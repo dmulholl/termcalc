@@ -145,5 +145,4 @@ final class ScannerTests: XCTestCase {
         let scanner = Scanner("&")
         XCTAssertThrowsError(try scanner.scan())
     }
-
 }

@@ -15,7 +15,7 @@ struct ExprPrinter {
         } else if let unary = expr as? UnaryExpr {
             return parenthesize(unary.optoken.lexeme, unary.rightexpr)
         } else if let variable = expr as? VariableExpr {
-            return variable.token.lexeme
+            return variable.name.lexeme
         } else {
             return "UNSUPPORTED EXPRESSION TYPE"
         }

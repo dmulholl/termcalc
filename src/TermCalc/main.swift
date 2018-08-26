@@ -10,9 +10,14 @@ let interpreter = Interpreter()
 while true {
     print("> ", terminator: "")
     if let input = readLine() {
+        if input == "q" || input == "quit" {
+            break
+        }
         do {
             let output = try interpreter.interpret(source: input)
-            print(output)
+            if !output.isEmpty{
+                print(output)
+            }
         } catch {
             print(error)
         }

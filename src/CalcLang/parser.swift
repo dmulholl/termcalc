@@ -32,7 +32,19 @@ class Parser {
 
     private func assignment() throws -> Expr {
         let expr = try addition()
-        // TODO: implement variable assignment.
+        if match(.equal) {
+            let optoken = next()
+            let rightexpr = try assignment()
+            if let leftexpr = expr as? VariableExpr {
+                return AssignExpr(leftexpr.name, optoken, rightexpr)
+            } else {
+                throw Err.parseError(
+                    offset: optoken.offset,
+                    lexeme: optoken.lexeme,
+                    message: "can only assign to a variable"
+                )
+            }
+        }
         return expr
     }
 

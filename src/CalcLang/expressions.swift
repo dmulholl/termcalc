@@ -46,9 +46,22 @@ public class LiteralExpr: Expr {
 
 
 public class VariableExpr: Expr {
-    let token: Token
+    let name: Token
 
-    init(_ token: Token) {
-        self.token = token
+    init(_ name: Token) {
+        self.name = name
+    }
+}
+
+
+class AssignExpr: Expr {
+    let name: Token
+    let optoken: Token
+    let value: Expr
+
+    init(_ name: Token, _ optoken: Token, _ value: Expr) {
+        self.name = name
+        self.optoken = optoken
+        self.value = value
     }
 }

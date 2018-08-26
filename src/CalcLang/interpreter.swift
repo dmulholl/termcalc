@@ -5,11 +5,14 @@ public class Interpreter {
 
     var precision = 9
 
-    public init() {}
-
     let constants = [
-        "pi": 3.14,
+        "pi": Double.pi,
+        "e": M_E,
     ]
+
+    var variables = [String:Double]()
+
+    public init() {}
 
     public func interpret(source: String) throws -> String {
         let scanner = Scanner(source)
@@ -17,7 +20,11 @@ public class Interpreter {
         let parser = Parser(tokens)
         let expr = try parser.parse()
         let value = try eval(expr)
-        return stringify(value)
+        if expr is AssignExpr {
+            return ""
+        } else {
+            return stringify(value)
+        }
     }
 
     func stringify(_ value: Double) -> String {
@@ -39,6 +46,8 @@ public class Interpreter {
             return try evalUnary(unary)
         } else if let variable = expr as? VariableExpr {
             return try evalVariable(variable)
+        } else if let assignment = expr as? AssignExpr {
+            return try evalAssign(assignment)
         }
         print("eval: unreachable")
         exit(1)
@@ -80,7 +89,22 @@ public class Interpreter {
     }
 
     private func evalVariable(_ expr: VariableExpr) throws -> Double {
-        return 99
+        if let value = variables[expr.name.lexeme] {
+            return value
+        }
+        else if let value = constants[expr.name.lexeme] {
+            return value
+        }
+        throw Err.undefinedVariable(
+            offset: expr.name.offset,
+            lexeme: expr.name.lexeme
+        )
+    }
+
+    private func evalAssign(_ expr: AssignExpr) throws -> Double {
+        let value = try eval(expr.value)
+        variables[expr.name.lexeme] = value
+        return value
     }
 
 

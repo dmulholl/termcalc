@@ -10,8 +10,17 @@ final class ParserTests: XCTestCase {
         XCTAssertThrowsError(try parser.parse())
     }
 
-    func testSingleLiteral() {
+    func testSingleIntegerLiteral() {
         let scanner = Scanner("1")
+        let tokens = try! scanner.scan()
+        let parser = Parser(tokens)
+        let expr = try! parser.parse()
+        let string = ExprPrinter().stringify(expr)
+        XCTAssertEqual(string, "1.0")
+    }
+
+    func testSingleFloatLiteral() {
+        let scanner = Scanner("1.0")
         let tokens = try! scanner.scan()
         let parser = Parser(tokens)
         let expr = try! parser.parse()
@@ -63,8 +72,4 @@ final class ParserTests: XCTestCase {
         let string = ExprPrinter().stringify(expr)
         XCTAssertEqual(string, "(* (+ 1.0 2.0) 3.0)")
     }
-
-
-
-
 }
