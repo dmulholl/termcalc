@@ -87,6 +87,13 @@ public class Interpreter {
                 throw Err.divByZero(offset: expr.optoken.offset)
             }
             return lvalue / rvalue
+        case .modulo:
+            if rvalue == 0 {
+                throw Err.divByZero(offset: expr.optoken.offset)
+            }
+            return lvalue.truncatingRemainder(dividingBy: rvalue)
+        case .caret:
+            return pow(lvalue, rvalue)
         default:
             print("evalBinary: unreachable")
             exit(1)

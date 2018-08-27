@@ -57,8 +57,18 @@ class Parser {
     }
 
     private func multiplication() throws -> Expr {
+        var expr = try power()
+        while match(.star, .slash, .modulo) {
+            let optoken = next()
+            let rightexpr = try power()
+            expr = BinaryExpr(expr, optoken, rightexpr)
+        }
+        return expr
+    }
+
+    private func power() throws -> Expr {
         var expr = try unary()
-        while match(.star, .slash) {
+        while match(.caret) {
             let optoken = next()
             let rightexpr = try unary()
             expr = BinaryExpr(expr, optoken, rightexpr)

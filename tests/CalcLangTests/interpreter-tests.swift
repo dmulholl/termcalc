@@ -45,10 +45,16 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(output, "-1")
     }
 
-    func testPrecedence() {
+    func testAdditionMultiplicationPrecedence() {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: "1 + 2 * 3")
         XCTAssertEqual(output, "7")
+    }
+
+    func testMultiplicationAdditionPrecedence() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "1 * 2 + 3")
+        XCTAssertEqual(output, "5")
     }
 
     func testGrouping() {
@@ -114,4 +120,71 @@ final class InterpreterTests: XCTestCase {
                 }
             }
     }
+
+    func testAddition() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "1.50 + 9")
+        XCTAssertEqual(output, "10.5")
+    }
+
+    func testSubtraction() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "1.50 - 9")
+        XCTAssertEqual(output, "-7.5")
+    }
+
+    func testMultiplication() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "1.50 * 2")
+        XCTAssertEqual(output, "3")
+    }
+
+    func testDivision() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "3 / 2")
+        XCTAssertEqual(output, "1.5")
+    }
+
+    func testIntegerModulo() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "3 % 2")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testFloatModulo() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "5 % 1.5")
+        XCTAssertEqual(output, "0.5")
+    }
+
+    func testIntegerPower() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "2 ^ 3")
+        XCTAssertEqual(output, "8")
+    }
+
+    func testMultiplicationPowerPrecedence() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "4 * 2 ^ 3")
+        XCTAssertEqual(output, "32")
+    }
+
+    func testPowerMultiplicationPrecedence() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "2 ^ 3 * 4")
+        XCTAssertEqual(output, "32")
+    }
+
+    func testFractionalPower() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "9 ^ 0.5")
+        XCTAssertEqual(output, "3")
+    }
+
+    func testFloatPower() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "9 ^ 1.5")
+        XCTAssertEqual(output, "27")
+    }
+
 }
