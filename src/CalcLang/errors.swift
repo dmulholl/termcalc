@@ -14,4 +14,6 @@ enum Err: Error, Equatable {
     // Interpreter errors.
     case divByZero(offset: Int, lexeme: String)
     case undefinedVariable(offset: Int, lexeme: String)
+    case undefinedFunction(offset: Int, lexeme: String)
+    case arityError(offset: Int, lexeme: String, message: String)
 }

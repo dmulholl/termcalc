@@ -1,5 +1,4 @@
 
-
 class Parser {
 
     let tokens: [Token]
@@ -90,7 +89,24 @@ class Parser {
 
     private func call() throws -> Expr {
         let expr = try primary()
-        // TODO: implement call expressions.
+        if let variable = expr as? VariableExpr {
+            if match(.leftparen) {
+                _ = next()
+                var arguments = [Expr]()
+                if !match(.rightparen) {
+                    while true {
+                        arguments.append(try expression())
+                        if match(.comma) {
+                            _ = next()
+                        } else {
+                            break
+                        }
+                    }
+                }
+                try consume(.rightparen, ")")
+                return CallExpr(variable, arguments)
+            }
+        }
         return expr
     }
 

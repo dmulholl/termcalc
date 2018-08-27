@@ -10,6 +10,11 @@ public class Interpreter {
         "e": M_E,
     ]
 
+    let functions: [String:Function] = [
+        "deg": Deg(),
+        "rad": Rad(),
+    ]
+
     var variables = [String:Double]()
 
     public init() {}
@@ -53,6 +58,8 @@ public class Interpreter {
             return try evalVariable(variable)
         } else if let assignment = expr as? AssignExpr {
             return try evalAssign(assignment)
+        } else if let call = expr as? CallExpr {
+            return try evalCall(call)
         }
         print("eval: unreachable")
         exit(1)
@@ -169,5 +176,19 @@ public class Interpreter {
         return variables[expr.name.lexeme]!
     }
 
+    func evalCall(_ expr: CallExpr) throws -> Double {
+        guard let callee = functions[expr.callee.name.lexeme] else {
+            throw Err.undefinedFunction(
+                offset: expr.callee.name.offset,
+                lexeme: expr.callee.name.lexeme
+            )
+        }
 
+        var arguments = [Double]()
+        for argument in expr.arguments {
+            arguments.append(try eval(argument))
+        }
+
+        return try callee.call(token: expr.callee.name, args: arguments)
+    }
 }

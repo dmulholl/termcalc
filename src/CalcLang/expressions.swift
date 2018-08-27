@@ -65,3 +65,14 @@ class AssignExpr: Expr {
         self.value = value
     }
 }
+
+
+class CallExpr: Expr {
+    let callee: VariableExpr
+    let arguments: [Expr]
+
+    init(_ callee: VariableExpr, _ arguments: [Expr]) {
+        self.callee = callee
+        self.arguments = arguments
+    }
+}
