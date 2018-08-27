@@ -12,6 +12,6 @@ enum Err: Error, Equatable {
     case expectToken(offset: Int, lexeme: String, expected: String)
 
     // Interpreter errors.
-    case divByZero(offset: Int)
+    case divByZero(offset: Int, lexeme: String)
     case undefinedVariable(offset: Int, lexeme: String)
 }

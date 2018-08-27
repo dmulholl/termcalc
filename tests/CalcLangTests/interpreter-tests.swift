@@ -187,4 +187,51 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(output, "27")
     }
 
+    func testPlusEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 1")
+        _ = try! interpreter.interpret(source: "foo += 1")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testMinusEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 1")
+        _ = try! interpreter.interpret(source: "foo -= 1")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testStarEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 2")
+        _ = try! interpreter.interpret(source: "foo *= 3")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "6")
+    }
+
+    func testSlashEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 5")
+        _ = try! interpreter.interpret(source: "foo /= 2")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "2.5")
+    }
+
+    func testModuloEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 10")
+        _ = try! interpreter.interpret(source: "foo %= 3")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testCaretEqualsAssignment() {
+        let interpreter = Interpreter()
+        _ = try! interpreter.interpret(source: "foo = 2")
+        _ = try! interpreter.interpret(source: "foo ^= 3")
+        let output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "8")
+    }
 }

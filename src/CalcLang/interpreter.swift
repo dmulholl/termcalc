@@ -84,12 +84,18 @@ public class Interpreter {
             return lvalue * rvalue
         case .slash:
             if rvalue == 0 {
-                throw Err.divByZero(offset: expr.optoken.offset)
+                throw Err.divByZero(
+                    offset: expr.optoken.offset,
+                    lexeme: expr.optoken.lexeme
+                )
             }
             return lvalue / rvalue
         case .modulo:
             if rvalue == 0 {
-                throw Err.divByZero(offset: expr.optoken.offset)
+                throw Err.divByZero(
+                    offset: expr.optoken.offset,
+                    lexeme: expr.optoken.lexeme
+                )
             }
             return lvalue.truncatingRemainder(dividingBy: rvalue)
         case .caret:
@@ -114,9 +120,53 @@ public class Interpreter {
     }
 
     private func evalAssign(_ expr: AssignExpr) throws -> Double {
-        let value = try eval(expr.value)
-        variables[expr.name.lexeme] = value
-        return value
+        let rvalue = try eval(expr.value)
+
+        if expr.optoken.type == .equal {
+            variables[expr.name.lexeme] = rvalue
+            return rvalue
+        }
+
+        guard let lvalue = variables[expr.name.lexeme] else {
+            throw Err.undefinedVariable(
+                offset: expr.name.offset,
+                lexeme: expr.name.lexeme
+            )
+        }
+
+        switch expr.optoken.type {
+        case .plusequal:
+            variables[expr.name.lexeme] = lvalue + rvalue
+        case .minusequal:
+            variables[expr.name.lexeme] = lvalue - rvalue
+        case .starequal:
+            variables[expr.name.lexeme] = lvalue * rvalue
+        case .slashequal:
+            if rvalue == 0 {
+                throw Err.divByZero(
+                    offset: expr.optoken.offset,
+                    lexeme: expr.optoken.lexeme
+                )
+            }
+            variables[expr.name.lexeme] = lvalue / rvalue
+        case .moduloequal:
+            if rvalue == 0 {
+                throw Err.divByZero(
+                    offset: expr.optoken.offset,
+                    lexeme: expr.optoken.lexeme
+                )
+            }
+            variables[expr.name.lexeme] = lvalue.truncatingRemainder(
+                dividingBy: rvalue
+            )
+        case .caretequal:
+            variables[expr.name.lexeme] = pow(lvalue, rvalue)
+        default:
+            print("evalAssign: unreachable")
+            exit(1)
+        }
+
+        return variables[expr.name.lexeme]!
     }
 
 

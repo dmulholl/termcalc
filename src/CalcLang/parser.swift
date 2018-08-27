@@ -31,7 +31,10 @@ class Parser {
 
     private func assignment() throws -> Expr {
         let expr = try addition()
-        if match(.equal) {
+        if match(
+            .equal, .plusequal, .minusequal, .starequal,
+            .slashequal, .moduloequal, .caretequal
+        ) {
             let optoken = next()
             let rightexpr = try assignment()
             if let leftexpr = expr as? VariableExpr {
