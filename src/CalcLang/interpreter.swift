@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
 // The interpreter accepts a string containing a single expression, evaluates
-// this expression, and returns the stringified result.
+// the expression, and returns the stringified result.
 // -----------------------------------------------------------------------------
 
 import Foundation

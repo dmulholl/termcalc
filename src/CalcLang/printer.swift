@@ -2,7 +2,6 @@
 // Expression printer. Used internally to test the output of the parser.
 // -----------------------------------------------------------------------------
 
-
 struct ExprPrinter {
 
     func stringify(_ expr: Expr) -> String {

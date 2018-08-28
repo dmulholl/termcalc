@@ -3,7 +3,6 @@
 // tokens.
 // -----------------------------------------------------------------------------
 
-
 class Scanner {
     private let source: [Character]
     private var start = 0

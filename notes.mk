@@ -18,3 +18,5 @@
 * add hyperbolic trig functions
 
 * check the output of every binary operation and function call for overflow
+
+* add root(n,x) function

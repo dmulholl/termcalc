@@ -2,7 +2,6 @@
 // Tokens are produced by the scanner and consumed by the parser.
 // -----------------------------------------------------------------------------
 
-
 struct Token {
     let type: TokenType
     let lexeme: String
