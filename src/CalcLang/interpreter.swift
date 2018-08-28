@@ -11,8 +11,24 @@ public class Interpreter {
     ]
 
     let functions: [String:Function] = [
+        "acos": Acos(),
+        "acosd": Acosd(),
+        "asin": Asin(),
+        "atan": Atan(),
+        "cbrt": Cbrt(),
+        "cos": Cos(),
+        "cosd": Cosd(),
         "deg": Deg(),
+        "ln": Ln(),
+        "log": Log(),
+        "log2": Log2(),
+        "log10": Log10(),
         "rad": Rad(),
+        "sin": Sin(),
+        "sind": Sind(),
+        "sqrt": Sqrt(),
+        "tan": Tan(),
+        "tand": Tand(),
     ]
 
     var variables = [String:Double]()
@@ -42,7 +58,7 @@ public class Interpreter {
                 _ = string.removeLast()
             }
         }
-        return string
+        return string == "-0" ? "0" : string
     }
 
     func eval(_ expr: Expr) throws -> Double {

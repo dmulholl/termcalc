@@ -234,4 +234,206 @@ final class InterpreterTests: XCTestCase {
         let output = try! interpreter.interpret(source: "foo")
         XCTAssertEqual(output, "8")
     }
+
+    func testDegFunc() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "deg(pi)")
+        XCTAssertEqual(output, "180")
+    }
+
+    func testRadFunc() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "rad(180)")
+        XCTAssertEqual(output, "3.141592654")
+    }
+
+    func testDegFuncArityErrorWithNoArgs() {
+        let interpreter = Interpreter()
+        XCTAssertThrowsError(
+            try interpreter.interpret(source: "deg()")) { error in
+                guard case Err.arityError = error else {
+                    return XCTFail()
+                }
+            }
+    }
+
+    func testDegFuncArityErrorWithTwoArgs() {
+        let interpreter = Interpreter()
+        XCTAssertThrowsError(
+            try interpreter.interpret(source: "deg(1, 2)")) { error in
+                guard case Err.arityError = error else {
+                    return XCTFail()
+                }
+            }
+    }
+
+    func testCos_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cos(0)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testCos_90() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cos(pi/2)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testCos_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cos(pi)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testCos_270() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cos(3 * pi / 2)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testCos_360() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cos(2 * pi)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testSin_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sin(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testSin_90() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sin(pi/2)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testSin_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sin(pi)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testSin_270() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sin(3 * pi / 2)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testSin_360() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sin(2 * pi)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testTan_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tan(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testTan_45() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tan(pi/4)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testTan_135() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tan(3 * pi / 4)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testTan_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tan(pi)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testCosd_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cosd(0)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testCosd_90() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cosd(90)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testCosd_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cosd(180)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testCosd_270() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cosd(270)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testCosd_360() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cosd(360)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testSind_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sind(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testSind_90() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sind(90)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testSind_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sind(180)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testSind_270() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sind(270)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testSind_360() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sind(360)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testTand_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tand(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testTand_45() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tand(45)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testTand_135() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tand(135)")
+        XCTAssertEqual(output, "-1")
+    }
+
+    func testTand_180() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "tand(180)")
+        XCTAssertEqual(output, "0")
+    }
+
+
 }

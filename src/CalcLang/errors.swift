@@ -16,4 +16,6 @@ enum Err: Error, Equatable {
     case undefinedVariable(offset: Int, lexeme: String)
     case undefinedFunction(offset: Int, lexeme: String)
     case arityError(offset: Int, lexeme: String, message: String)
+    case mathError(offset: Int, lexeme: String, message: String)
+
 }

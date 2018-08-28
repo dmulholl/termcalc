@@ -16,7 +16,7 @@ while true {
         do {
             let output = try interpreter.interpret(source: input)
             if !output.isEmpty{
-                print(output)
+                print("· \(output)")
             }
         } catch {
             print(error)
