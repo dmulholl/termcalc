@@ -1,9 +1,15 @@
+// -----------------------------------------------------------------------------
+// The interpreter accepts a string containing a single expression, evaluates
+// this expression, and returns the stringified result.
+// -----------------------------------------------------------------------------
 
 import Foundation
+
 
 public class Interpreter {
 
     var precision = 9
+    var variables = [String:Double]()
 
     let constants = [
         "pi": Double.pi,
@@ -31,8 +37,6 @@ public class Interpreter {
         "tand": Tand(),
     ]
 
-    var variables = [String:Double]()
-
     public init() {}
 
     public func interpret(source: String) throws -> String {
@@ -41,14 +45,10 @@ public class Interpreter {
         let parser = Parser(tokens)
         let expr = try parser.parse()
         let value = try eval(expr)
-        if expr is AssignExpr {
-            return ""
-        } else {
-            return stringify(value)
-        }
+        return expr is AssignExpr ? "" : stringify(value)
     }
 
-    func stringify(_ value: Double) -> String {
+    private func stringify(_ value: Double) -> String {
         var string = String(format: "%.\(precision)f", value)
         if string.contains(".") {
             while string.hasSuffix("0") {
@@ -61,7 +61,7 @@ public class Interpreter {
         return string == "-0" ? "0" : string
     }
 
-    func eval(_ expr: Expr) throws -> Double {
+    private func eval(_ expr: Expr) throws -> Double {
         if let literal = expr as? LiteralExpr {
             return literal.value
         } else if let grouping = expr as? GroupingExpr {
@@ -94,7 +94,6 @@ public class Interpreter {
         }
     }
 
-    // TODO: add overflow checking.
     private func evalBinary(_ expr: BinaryExpr) throws -> Double {
         let lvalue = try eval(expr.leftexpr)
         let rvalue = try eval(expr.rightexpr)
@@ -192,7 +191,7 @@ public class Interpreter {
         return variables[expr.name.lexeme]!
     }
 
-    func evalCall(_ expr: CallExpr) throws -> Double {
+    private func evalCall(_ expr: CallExpr) throws -> Double {
         guard let callee = functions[expr.callee.name.lexeme] else {
             throw Err.undefinedFunction(
                 offset: expr.callee.name.offset,

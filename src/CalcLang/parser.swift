@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// The parser takes an array of tokens and returns a parse tree of
+// expression objects.
+// -----------------------------------------------------------------------------
+
 
 class Parser {
 

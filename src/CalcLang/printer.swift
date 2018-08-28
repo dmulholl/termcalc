@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Expression printer. Used internally to test the output of the parser.
+// -----------------------------------------------------------------------------
+
 
 struct ExprPrinter {
 
@@ -16,6 +20,18 @@ struct ExprPrinter {
             return parenthesize(unary.optoken.lexeme, unary.rightexpr)
         } else if let variable = expr as? VariableExpr {
             return variable.name.lexeme
+        } else if let assign = expr as? AssignExpr {
+            let value = stringify(assign.value)
+            return "(\(assign.name.lexeme) = \(value))"
+        } else if let call = expr as? CallExpr {
+            var output = "\(call.callee.name.lexeme)("
+            var argstrings = [String]()
+            for argexpr in call.arguments {
+                argstrings.append(stringify(argexpr))
+            }
+            output += argstrings.joined(separator: ", ")
+            output += ")"
+            return output
         } else {
             return "UNSUPPORTED EXPRESSION TYPE"
         }

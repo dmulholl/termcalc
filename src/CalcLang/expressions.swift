@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Expressions are produced by the parser and consumed by the interpreter.
+// -----------------------------------------------------------------------------
+
 
 class Expr {}
 
@@ -33,7 +37,6 @@ class GroupingExpr: Expr {
         self.expr = expr
     }
 }
-
 
 
 class LiteralExpr: Expr {

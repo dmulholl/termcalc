@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Tokens are produced by the scanner and consumed by the parser.
+// -----------------------------------------------------------------------------
+
 
 struct Token {
     let type: TokenType
@@ -21,11 +25,8 @@ enum TokenType {
     case plus, minus, star, slash, modulo, caret, equal
     case plusequal, minusequal, starequal, slashequal, moduloequal, caretequal
     case identifier, integer, float
-    case setkeyword
     case eof
 }
 
 
-let keywords = [
-    "set": TokenType.setkeyword,
-]
+let keywords: [String:TokenType] = [:]

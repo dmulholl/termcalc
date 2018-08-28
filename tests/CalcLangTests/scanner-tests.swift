@@ -93,16 +93,6 @@ final class ScannerTests: XCTestCase {
         XCTAssertEqual(tokens, expect)
     }
 
-    func testKeyword() {
-        let scanner = Scanner("set")
-        let tokens = try! scanner.scan()
-        let expect = [
-            Token(type: .setkeyword, lexeme: "set", offset: 0),
-            Token(type: .eof, lexeme: "", offset: 3),
-        ]
-        XCTAssertEqual(tokens, expect)
-    }
-
     func testIdentifier() {
         let scanner = Scanner("foo")
         let tokens = try! scanner.scan()

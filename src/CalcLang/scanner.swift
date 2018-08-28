@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// The scanner accepts a source string and converts it into a sequence of
+// tokens.
+// -----------------------------------------------------------------------------
+
 
 class Scanner {
     private let source: [Character]

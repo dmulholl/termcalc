@@ -1,8 +1,12 @@
+// -----------------------------------------------------------------------------
+// Extension methods on the String type required by the scanner.
+// -----------------------------------------------------------------------------
 
 import Foundation
 
+
 extension String {
-    
+
     func isAlpha() -> Bool {
         return
             !isEmpty &&

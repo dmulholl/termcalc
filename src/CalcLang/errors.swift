@@ -1,3 +1,6 @@
+// -----------------------------------------------------------------------------
+// Errors raised by the library.
+// -----------------------------------------------------------------------------
 
 enum Err: Error, Equatable {
 
@@ -17,5 +20,4 @@ enum Err: Error, Equatable {
     case undefinedFunction(offset: Int, lexeme: String)
     case arityError(offset: Int, lexeme: String, message: String)
     case mathError(offset: Int, lexeme: String, message: String)
-
 }
