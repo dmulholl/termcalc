@@ -72,7 +72,6 @@ public class Terminal {
         fflush(stdout)
     }
 
-
     public func width() -> Int? {
         if let columns = ProcessInfo.processInfo.environment["COLUMNS"] {
             if let width = Int(columns) {
