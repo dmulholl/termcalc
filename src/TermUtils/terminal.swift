@@ -5,41 +5,27 @@ import Foundation
 public class Terminal {
 
     public static func writeErr(_ string: String) {
-        guard let data = string.data(using: .utf8) else {
-            return
+        if let data = string.data(using: .utf8) {
+            FileHandle.standardError.write(data)
         }
-        FileHandle.standardError.write(data)
     }
 
     public enum Color: String {
-        case reset
-        case bold
-        case dim
-        case black
-        case red
-        case green
-        case yellow
-        case blue
-        case magenta
-        case cyan
-        case white
-        case grey
+        case reset = "\u{001B}[0m"
+        case bold = "\u{001B}[1m"
+        case dim = "\u{001B}[2m"
+        case black = "\u{001B}[30m"
+        case red = "\u{001B}[31m"
+        case green = "\u{001B}[32m"
+        case yellow = "\u{001B}[33m"
+        case blue = "\u{001B}[34m"
+        case magenta = "\u{001B}[35m"
+        case cyan = "\u{001B}[36m"
+        case white = "\u{001B}[37m"
+        case grey = "\u{001B}[30;1m"
 
-        var string: String {
-            switch self {
-            case .reset: return "\u{001B}[0m"
-            case .bold: return "\u{001B}[1m"
-            case .dim: return "\u{001B}[2m"
-            case .black: return "\u{001B}[30m"
-            case .red: return "\u{001B}[31m"
-            case .green: return "\u{001B}[32m"
-            case .yellow: return "\u{001B}[33m"
-            case .blue: return "\u{001B}[34m"
-            case .magenta: return "\u{001B}[35m"
-            case .cyan: return "\u{001B}[36m"
-            case .white: return "\u{001B}[37m"
-            case .grey: return "\u{001B}[30;1m"
-            }
+        public var string: String {
+            return self.rawValue
         }
     }
 
@@ -87,11 +73,9 @@ public class Terminal {
         return nil
     }
 
-    public func getLine(
-        prompt: String,
-        color: Color? = nil,
-        editable: Bool = false
-    ) -> String? {
+    public func getLine(prompt: String,
+                        color: Color? = nil,
+                        editable: Bool = false) -> String? {
         if editable {
             return LineEditor(prompt: prompt, color: color).getLine()
         } else {
