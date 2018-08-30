@@ -5,7 +5,7 @@
 import Foundation
 import Janus
 import CalcLang
-import LineNoise
+//import LineNoise
 import TermUtils
 
 
@@ -62,19 +62,27 @@ guard let term = Terminal() else {
     exit(1)
 }
 
+// term.writeln("foobar", color: .black)
+// term.writeln("foobar", color: .underline)
+// term.writeln("foobar", color: .magenta)
+// term.writeln("foobar", color: .cyan)
+// term.writeln("foobar", color: .white)
+// term.writeln("foobar", color: .grey)
+// term.writeln("foobar", color: .brightBlue)
+
 term.writeln("─", color: .grey, times: term.width() ?? 80)
 term.writeln(" · TermCalc ·")
 term.writeln("─", color: .grey, times: term.width() ?? 80)
 
 
 let interpreter = Interpreter()
-let ln = LineNoise()
+// let ln = LineNoise()
 
-let prompt = "\u{001B}[30;1m>> \u{001B}[0m" // 11 extra characters
+// let prompt = "\u{001B}[30;1m>> \u{001B}[0m" // 11 extra characters
 
 while true {
     do {
-        let input = try ln.getLine(prompt: prompt)
+        let input = try term.getLineNoise(prompt: ">> ", color: .grey)
         print()
         if input == "q" || input == "quit" {
             break

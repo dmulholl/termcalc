@@ -7,7 +7,7 @@ class LineEditor {
 
     }
 
-    func getLine() -> String? {
-        return readLine()
+    func getLine() -> String {
+        return "NOT IMPLEMENTED"
     }
 }

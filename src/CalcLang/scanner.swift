@@ -91,7 +91,10 @@ class Scanner {
         }
 
         else {
-            throw Err.invalidCharacter(offset: current - 1, char: char)
+            throw CalcLangError.invalidCharacter(
+                offset: current - 1,
+                char: char
+            )
         }
     }
 

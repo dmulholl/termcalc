@@ -16,7 +16,7 @@ class Parser {
         let expr = try expression()
         if !isAtEnd() {
             let token = next()
-            throw Err.unexpectedToken(
+            throw CalcLangError.unexpectedToken(
                 offset: token.offset,
                 lexeme: token.lexeme
             )
@@ -43,7 +43,7 @@ class Parser {
             if let leftexpr = expr as? VariableExpr {
                 return AssignExpr(leftexpr.name, optoken, rightexpr)
             } else {
-                throw Err.illegalAssignment(
+                throw CalcLangError.illegalAssignment(
                     offset: optoken.offset,
                     lexeme: optoken.lexeme
                 )
@@ -120,7 +120,7 @@ class Parser {
             if let value = Double(token.lexeme) {
                 return LiteralExpr(value)
             } else {
-                throw Err.unparsableLiteral(
+                throw CalcLangError.unparsableLiteral(
                     offset: token.offset,
                     lexeme: token.lexeme
                 )
@@ -134,7 +134,7 @@ class Parser {
             return VariableExpr(next())
         }
         let token = next()
-        throw Err.expectExpression(
+        throw CalcLangError.expectExpression(
             offset: token.offset,
             lexeme: token.lexeme
         )
@@ -178,7 +178,7 @@ class Parser {
             _ = next()
         } else {
             let token = next()
-            throw Err.expectToken(
+            throw CalcLangError.expectToken(
                 offset: token.offset,
                 lexeme: token.lexeme,
                 expected: literal

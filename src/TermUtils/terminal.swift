@@ -1,6 +1,6 @@
 
 import Foundation
-
+import LineNoise
 
 public class Terminal {
 
@@ -10,10 +10,26 @@ public class Terminal {
         }
     }
 
+    public static func isTerminalStdin() -> Bool {
+        return isatty(fileno(stdin)) != 0
+    }
+
+    public static func isTerminalStdout() -> Bool {
+        return isatty(fileno(stdout)) != 0
+    }
+
+    public static func isTerminalStderr() -> Bool {
+        return isatty(fileno(stderr)) != 0
+    }
+
     public enum Color: String {
         case reset = "\u{001B}[0m"
         case bold = "\u{001B}[1m"
         case dim = "\u{001B}[2m"
+        case underline = "\u{001B}[4m"
+        case blink = "\u{001B}[5m"
+        case hide = "\u{001B}[8m"
+
         case black = "\u{001B}[30m"
         case red = "\u{001B}[31m"
         case green = "\u{001B}[32m"
@@ -22,6 +38,17 @@ public class Terminal {
         case magenta = "\u{001B}[35m"
         case cyan = "\u{001B}[36m"
         case white = "\u{001B}[37m"
+        case def = "\u{001B}[39m"
+
+        case brightBlack = "\u{001B}[90m"
+        case brightRed = "\u{001B}[91m"
+        case brightGreen = "\u{001B}[92m"
+        case brightYellow = "\u{001B}[93m"
+        case brightBlue = "\u{001B}[94m"
+        case brightMagenta = "\u{001B}[95m"
+        case brightCyan = "\u{001B}[96m"
+        case brightWhite = "\u{001B}[97m"
+
         case grey = "\u{001B}[30;1m"
 
         public var string: String {
@@ -73,14 +100,23 @@ public class Terminal {
         return nil
     }
 
-    public func getLine(prompt: String,
-                        color: Color? = nil,
-                        editable: Bool = false) -> String? {
-        if editable {
-            return LineEditor(prompt: prompt, color: color).getLine()
+    public func getLine(prompt: String, color: Color? = nil) -> String {
+        return LineEditor(prompt: prompt, color: color).getLine()
+    }
+
+    public func getLineBasic(prompt: String, color: Color? = nil) -> String? {
+        write(prompt, color: color)
+        return readLine()
+    }
+
+    public func getLineNoise(prompt: String, color: Color? = nil) throws -> String {
+        let ln = LineNoise()
+        if color == nil {
+            return try ln.getLine(prompt: prompt)
         } else {
-            write(prompt, color: color)
-            return readLine()
+            let promptString = "\(color!.string)\(prompt)\(Color.reset.string)"
+            ln.promptDelta =  promptString.count - prompt.count
+            return try ln.getLine(prompt: promptString)
         }
     }
 }

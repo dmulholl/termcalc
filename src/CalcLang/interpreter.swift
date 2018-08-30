@@ -108,7 +108,7 @@ public class Interpreter {
             return lvalue * rvalue
         case .slash:
             if rvalue == 0 {
-                throw Err.divByZero(
+                throw CalcLangError.divByZero(
                     offset: expr.optoken.offset,
                     lexeme: expr.optoken.lexeme
                 )
@@ -116,7 +116,7 @@ public class Interpreter {
             return lvalue / rvalue
         case .modulo:
             if rvalue == 0 {
-                throw Err.divByZero(
+                throw CalcLangError.divByZero(
                     offset: expr.optoken.offset,
                     lexeme: expr.optoken.lexeme
                 )
@@ -137,7 +137,7 @@ public class Interpreter {
         else if let value = constants[expr.name.lexeme] {
             return value
         }
-        throw Err.undefinedVariable(
+        throw CalcLangError.undefinedVariable(
             offset: expr.name.offset,
             lexeme: expr.name.lexeme
         )
@@ -152,7 +152,7 @@ public class Interpreter {
         }
 
         guard let lvalue = variables[expr.name.lexeme] else {
-            throw Err.undefinedVariable(
+            throw CalcLangError.undefinedVariable(
                 offset: expr.name.offset,
                 lexeme: expr.name.lexeme
             )
@@ -167,7 +167,7 @@ public class Interpreter {
             variables[expr.name.lexeme] = lvalue * rvalue
         case .slashequal:
             if rvalue == 0 {
-                throw Err.divByZero(
+                throw CalcLangError.divByZero(
                     offset: expr.optoken.offset,
                     lexeme: expr.optoken.lexeme
                 )
@@ -175,7 +175,7 @@ public class Interpreter {
             variables[expr.name.lexeme] = lvalue / rvalue
         case .moduloequal:
             if rvalue == 0 {
-                throw Err.divByZero(
+                throw CalcLangError.divByZero(
                     offset: expr.optoken.offset,
                     lexeme: expr.optoken.lexeme
                 )
@@ -195,7 +195,7 @@ public class Interpreter {
 
     private func evalCall(_ expr: CallExpr) throws -> Double {
         guard let callee = functions[expr.callee.name.lexeme] else {
-            throw Err.undefinedFunction(
+            throw CalcLangError.undefinedFunction(
                 offset: expr.callee.name.offset,
                 lexeme: expr.callee.name.lexeme
             )

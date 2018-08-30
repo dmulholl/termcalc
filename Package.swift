@@ -16,7 +16,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/dmulholland/linenoise-swift.git",
-            from: "0.0.4"
+            from: "0.0.5"
         ),
         // .package(
         //     url: "https://github.com/apple/swift-package-manager.git",
@@ -29,10 +29,10 @@ let package = Package(
             dependencies: []),
         .target(
             name: "TermCalc",
-            dependencies: ["CalcLang", "Janus", "LineNoise", "TermUtils"]),
+            dependencies: ["CalcLang", "Janus", "TermUtils"]),
         .target(
             name: "TermUtils",
-            dependencies: []),
+            dependencies: ["LineNoise"]),
         .testTarget(
             name: "CalcLangTests",
             dependencies: ["CalcLang"]),
