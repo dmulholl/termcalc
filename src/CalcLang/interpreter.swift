@@ -100,15 +100,16 @@ public class Interpreter {
     }
 
     private func evalBinary(_ expr: BinaryExpr) throws -> Double {
+        let result: Double
         let lvalue = try eval(expr.leftexpr)
         let rvalue = try eval(expr.rightexpr)
         switch expr.optoken.type {
         case .plus:
-            return lvalue + rvalue
+            result = lvalue + rvalue
         case .minus:
-            return lvalue - rvalue
+            result = lvalue - rvalue
         case .star:
-            return lvalue * rvalue
+            result = lvalue * rvalue
         case .slash:
             if rvalue == 0 {
                 throw CalcLangError.divByZero(
@@ -116,7 +117,7 @@ public class Interpreter {
                     lexeme: expr.optoken.lexeme
                 )
             }
-            return lvalue / rvalue
+            result = lvalue / rvalue
         case .modulo:
             if rvalue == 0 {
                 throw CalcLangError.divByZero(
@@ -124,13 +125,27 @@ public class Interpreter {
                     lexeme: expr.optoken.lexeme
                 )
             }
-            return lvalue.truncatingRemainder(dividingBy: rvalue)
+            result = lvalue.truncatingRemainder(dividingBy: rvalue)
         case .caret:
-            return pow(lvalue, rvalue)
+            result = pow(lvalue, rvalue)
         default:
             print("evalBinary: unreachable")
             exit(1)
         }
+        if result.isInfinite {
+            throw CalcLangError.mathError(
+                offset: expr.optoken.offset,
+                lexeme: expr.optoken.lexeme,
+                message: "operation results in overflow"
+            )
+        } else if result.isNaN {
+            throw CalcLangError.mathError(
+                offset: expr.optoken.offset,
+                lexeme: expr.optoken.lexeme,
+                message: "result is not a representable number (NaN)"
+            )
+        }
+        return result
     }
 
     private func evalVariable(_ expr: VariableExpr) throws -> Double {
@@ -209,6 +224,21 @@ public class Interpreter {
             arguments.append(try eval(argument))
         }
 
-        return try callee.call(token: expr.callee.name, args: arguments)
+        let result = try callee.call(token: expr.callee.name, args: arguments)
+
+        if result.isInfinite {
+            throw CalcLangError.mathError(
+                offset: expr.callee.name.offset,
+                lexeme: expr.callee.name.lexeme,
+                message: "function call results in overflow"
+            )
+        } else if result.isNaN {
+            throw CalcLangError.mathError(
+                offset: expr.callee.name.offset,
+                lexeme: expr.callee.name.lexeme,
+                message: "result is not a representable number (NaN)"
+            )
+        }
+        return result
     }
 }

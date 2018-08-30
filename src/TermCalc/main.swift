@@ -6,7 +6,6 @@ import Foundation
 import Janus
 import CalcLang
 import TermUtils
-import LineNoise
 
 let version = "0.2.0"
 
@@ -71,6 +70,7 @@ guard Terminal.isTerminalStdin() else {
     Terminal.writeErr("Error: TermCalc requires an interactive terminal.\n")
     exit(1)
 }
+
 
 term.writeln("─", color: .grey, times: term.width() ?? 80)
 term.write(" · ", color: .grey)
@@ -178,14 +178,15 @@ while true {
         term.writeln("^", color: .red, times: lexeme.count)
         term.write("!> ", color: .grey)
         term.writeln("Error: \(message).")
-    } catch LinenoiseError.EOF {
+    } catch TermUtilsError.eof {
         print()
         continue
-    } catch LinenoiseError.CTRL_C {
+    } catch TermUtilsError.ctrl_c {
         print()
-        continue
-    } catch {
+        term.writeln("─", color: .grey, times: term.width() ?? 80)
+        break
+    } catch TermUtilsError.linenoise(let message){
         term.write("!> ", color: .grey)
-        print(error)
+        print("Error: \(message)")
     }
 }

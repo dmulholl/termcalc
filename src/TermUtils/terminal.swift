@@ -56,10 +56,13 @@ public class Terminal {
         }
     }
 
+    private var ln: LineNoise
+
     public init?() {
         if isatty(fileno(stdout)) == 0 {
             return nil
         }
+        ln = LineNoise()
     }
 
     public func setColor(_ color: Color) {
@@ -110,13 +113,23 @@ public class Terminal {
     }
 
     public func getLineNoise(prompt: String, color: Color? = nil) throws -> String {
-        let ln = LineNoise()
-        if color == nil {
-            return try ln.getLine(prompt: prompt)
-        } else {
-            let promptString = "\(color!.string)\(prompt)\(Color.reset.string)"
-            ln.promptDelta =  promptString.count - prompt.count
-            return try ln.getLine(prompt: promptString)
+        do {
+            let input: String
+            if color == nil {
+                input = try ln.getLine(prompt: prompt)
+            } else {
+                let promptstr = "\(color!.string)\(prompt)\(Color.reset.string)"
+                ln.promptDelta =  promptstr.count - prompt.count
+                input = try ln.getLine(prompt: promptstr)
+            }
+            ln.addHistory(input)
+            return input
+        } catch LinenoiseError.EOF {
+            throw TermUtilsError.eof
+        } catch LinenoiseError.CTRL_C {
+            throw TermUtilsError.ctrl_c
+        } catch LinenoiseError.generalError(let message) {
+            throw TermUtilsError.linenoise(message)
         }
     }
 }
