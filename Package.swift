@@ -29,7 +29,7 @@ let package = Package(
             dependencies: []),
         .target(
             name: "TermCalc",
-            dependencies: ["CalcLang", "Janus", "TermUtils"]),
+            dependencies: ["CalcLang", "Janus", "TermUtils", "LineNoise"]),
         .target(
             name: "TermUtils",
             dependencies: ["LineNoise"]),

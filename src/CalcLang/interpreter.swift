@@ -32,6 +32,7 @@ public class Interpreter {
         "log2": Log2(),
         "log10": Log10(),
         "rad": Rad(),
+        "root": Root(),
         "sin": Sin(),
         "sind": Sind(),
         "sqrt": Sqrt(),
@@ -39,7 +40,9 @@ public class Interpreter {
         "tand": Tand(),
     ]
 
-    public init() {}
+    public init(precision: Int = 9) {
+        self.precision = precision
+    }
 
     public func interpret(source: String) throws -> String {
         let scanner = Scanner(source)

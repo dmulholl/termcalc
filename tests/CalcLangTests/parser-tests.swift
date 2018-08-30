@@ -78,7 +78,7 @@ final class ParserTests: XCTestCase {
         let tokens = try! scanner.scan()
         let parser = Parser(tokens)
         XCTAssertThrowsError(try parser.parse()) { error in
-            guard case Err.unexpectedToken = error else {
+            guard case CalcLangError.unexpectedToken = error else {
                 return XCTFail()
             }
         }
@@ -89,7 +89,7 @@ final class ParserTests: XCTestCase {
         let tokens = try! scanner.scan()
         let parser = Parser(tokens)
         XCTAssertThrowsError(try parser.parse()) { error in
-            guard case Err.illegalAssignment = error else {
+            guard case CalcLangError.illegalAssignment = error else {
                 return XCTFail()
             }
         }
@@ -100,7 +100,7 @@ final class ParserTests: XCTestCase {
         let tokens = try! scanner.scan()
         let parser = Parser(tokens)
         XCTAssertThrowsError(try parser.parse()) { error in
-            guard case Err.expectExpression = error else {
+            guard case CalcLangError.expectExpression = error else {
                 return XCTFail()
             }
         }
@@ -111,7 +111,7 @@ final class ParserTests: XCTestCase {
         let tokens = try! scanner.scan()
         let parser = Parser(tokens)
         XCTAssertThrowsError(try parser.parse()) { error in
-            guard case Err.expectToken = error else {
+            guard case CalcLangError.expectToken = error else {
                 return XCTFail()
             }
         }

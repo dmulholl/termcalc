@@ -2,7 +2,7 @@
 // Errors raised by the library.
 // -----------------------------------------------------------------------------
 
-enum CalcLangError: Error, Equatable {
+public enum CalcLangError: Error, Equatable {
 
     // Scanner errors.
     case invalidCharacter(offset: Int, char: Character)

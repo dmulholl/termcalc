@@ -71,7 +71,7 @@ public class Terminal {
         if let color = color {
             output = "\(color.string)\(string)\(Color.reset.string)"
         }
-        for _ in 1...times {
+        for _ in 0..<times {
             print(output, terminator: "")
         }
     }

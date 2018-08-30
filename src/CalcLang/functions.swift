@@ -289,6 +289,39 @@ class Cbrt: Function {
 }
 
 
+// Calculate the n-th root of the specified value.
+class Root: Function {
+    func call(token: Token, args: [Double]) throws -> Double {
+        guard args.count == 2 else {
+            throw CalcLangError.arityError(
+                offset: token.offset,
+                lexeme: token.lexeme,
+                message: "expected 2 arguments, found \(args.count)"
+            )
+        }
+        let n = args[0]
+        let x = args[1]
+
+        guard n > 0 else {
+            throw CalcLangError.mathError(
+                offset: token.offset,
+                lexeme: token.lexeme,
+                message: "only positive roots are supported"
+            )
+        }
+        guard x > 0 else {
+            throw CalcLangError.mathError(
+                offset: token.offset,
+                lexeme: token.lexeme,
+                message: "only roots of positive numbers are supported"
+            )
+        }
+
+        return pow(x, 1/n)
+    }
+}
+
+
 // -----------------------------------------------------------------------------
 // Logs.
 // -----------------------------------------------------------------------------
@@ -358,6 +391,13 @@ class Log: Function {
                 offset: token.offset,
                 lexeme: token.lexeme,
                 message: "log() requires a positive base"
+            )
+        }
+        guard operand > 0 else {
+            throw CalcLangError.mathError(
+                offset: token.offset,
+                lexeme: token.lexeme,
+                message: "log() requires a positive operand"
             )
         }
 

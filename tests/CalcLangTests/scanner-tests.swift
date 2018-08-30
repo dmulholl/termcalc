@@ -134,7 +134,7 @@ final class ScannerTests: XCTestCase {
     func testInvalidCharacterError() {
         let scanner = Scanner("&")
         XCTAssertThrowsError(try scanner.scan()) { error in
-            guard case Err.invalidCharacter = error else {
+            guard case CalcLangError.invalidCharacter = error else {
                 return XCTFail()
             }
         }
