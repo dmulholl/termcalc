@@ -23,13 +23,20 @@ public class Terminal {
     }
 
     public enum Color: String {
+
+        // Reset all attributes.
         case reset = "\u{001B}[0m"
+
+        // Attributes.
         case bold = "\u{001B}[1m"
         case dim = "\u{001B}[2m"
         case underline = "\u{001B}[4m"
         case blink = "\u{001B}[5m"
-        case hide = "\u{001B}[8m"
+        case reverse = "\u{001B}[7m"
+        case hidden = "\u{001B}[8m"
+        case strikeout = "\u{001B}[9m"
 
+        // Foreground colors.
         case black = "\u{001B}[30m"
         case red = "\u{001B}[31m"
         case green = "\u{001B}[32m"
@@ -38,8 +45,8 @@ public class Terminal {
         case magenta = "\u{001B}[35m"
         case cyan = "\u{001B}[36m"
         case white = "\u{001B}[37m"
-        case def = "\u{001B}[39m"
 
+        // Foreground colors (bright/light).
         case brightBlack = "\u{001B}[90m"
         case brightRed = "\u{001B}[91m"
         case brightGreen = "\u{001B}[92m"
@@ -49,9 +56,32 @@ public class Terminal {
         case brightCyan = "\u{001B}[96m"
         case brightWhite = "\u{001B}[97m"
 
-        case grey = "\u{001B}[30;1m"
+        // Background colors.
+        case bgBlack = "\u{001B}[40m"
+        case bgRed = "\u{001B}[41m"
+        case bgGreen = "\u{001B}[42m"
+        case bgYellow = "\u{001B}[43m"
+        case bgBlue = "\u{001B}[44m"
+        case bgMagenta = "\u{001B}[45m"
+        case bgCyan = "\u{001B}[46m"
+        case bgWhite = "\u{001B}[47m"
+
+        // Background colors (bright/light).
+        case bgBrightBlack = "\u{001B}[100m"
+        case bgBrightRed = "\u{001B}[101m"
+        case bgBrightGreen = "\u{001B}[102m"
+        case bgBrightYellow = "\u{001B}[103m"
+        case bgBrightBlue = "\u{001B}[104m"
+        case bgBrightMagenta = "\u{001B}[105m"
+        case bgBrightCyan = "\u{001B}[106m"
+        case bgBrightWhite = "\u{001B}[107m"
+
+        // Default foreground & background  colors.
+        case standard = "\u{001B}[39m"
+        case bgStandard = "\u{001B}[49m"
 
         public var string: String {
+            //return "\u{001B}[\(self.rawValue)m"
             return self.rawValue
         }
     }
@@ -69,10 +99,18 @@ public class Terminal {
         print(color.string, terminator: "")
     }
 
+    public func setColor256(_ color: UInt8) {
+        print("\u{001B}38;5;\(color)m", terminator: "")
+    }
+
+    public func setBgColor256(_ color: UInt8) {
+        print("\u{001B}48;5;\(color)m", terminator: "")
+    }
+
     public func write(_ string: String, color: Color? = nil, times: Int = 1) {
         var output = string
         if let color = color {
-            output = "\(color.string)\(string)\(Color.reset.string)"
+            output = "\(color.string)\(string)\(Color.standard.string)"
         }
         for _ in 0..<times {
             print(output, terminator: "")
