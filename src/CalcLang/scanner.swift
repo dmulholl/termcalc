@@ -90,6 +90,14 @@ class Scanner {
             readIdentifier()
         }
 
+        // Reference.
+        else if char == "$" {
+            while !isAtEnd() && String(peek()!).isDigit() {
+                _ = next()
+            }
+            addToken(type: .identifier)
+        }
+
         else {
             throw CalcLangError.invalidCharacter(
                 offset: current - 1,

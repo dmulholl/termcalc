@@ -20,11 +20,12 @@ func repl(argparser: ArgParser) {
     term.write("Terminal Calculator")
     term.write("  ││", color: .brightBlack)
 
-    term.write(" ", times: 18)
+    term.write(" ", times: 22)
     term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
     term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
 
     let interpreter = Interpreter(precision: argparser.getInt("precision"))
+    var count = 0
 
     while true {
         do {
@@ -45,8 +46,15 @@ func repl(argparser: ArgParser) {
             }
             let output = try interpreter.interpret(source: input)
             if !output.isEmpty{
+                count += 1
+                let result = "\(output)"
+                let resultID = "$\(count)"
+                let width = term.width() ?? 80
                 term.write("  =>  ", color: .brightBlack)
-                print("\(output)")
+                term.write(result)
+                let spaces = width - 6 - result.count - resultID.count - 2
+                term.write(" ", times: spaces)
+                term.writeln(resultID, color: .brightBlack)
             }
         } catch CalcLangError.invalidCharacter(let offset, let char) {
             term.write("  !>  ", color: .brightBlack)

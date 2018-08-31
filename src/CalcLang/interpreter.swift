@@ -10,6 +10,7 @@ public class Interpreter {
 
     var precision = 9
     var variables = [String:Double]()
+    var count = 0
 
     let constants = [
         "pi": Double.pi,
@@ -50,7 +51,14 @@ public class Interpreter {
         let parser = Parser(tokens)
         let expr = try parser.parse()
         let value = try eval(expr)
-        return expr is AssignExpr ? "" : stringify(value)
+        if expr is AssignExpr {
+            return ""
+        } else {
+            count += 1
+            variables["$\(count)"] = value
+            variables["$"] = value
+            return stringify(value)
+        }
     }
 
     private func stringify(_ value: Double) -> String {
