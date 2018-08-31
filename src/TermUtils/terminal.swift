@@ -22,67 +22,66 @@ public class Terminal {
         return isatty(fileno(stderr)) != 0
     }
 
-    public enum Color: String {
+    public enum Color: Int {
 
         // Reset all attributes.
-        case reset = "\u{001B}[0m"
+        case reset = 0
 
         // Attributes.
-        case bold = "\u{001B}[1m"
-        case dim = "\u{001B}[2m"
-        case underline = "\u{001B}[4m"
-        case blink = "\u{001B}[5m"
-        case reverse = "\u{001B}[7m"
-        case hidden = "\u{001B}[8m"
-        case strikeout = "\u{001B}[9m"
+        case bold = 1
+        case dim = 2
+        case underline = 4
+        case blink = 5
+        case reverse = 7
+        case hidden = 8
+        case strikeout = 9
 
         // Foreground colors.
-        case black = "\u{001B}[30m"
-        case red = "\u{001B}[31m"
-        case green = "\u{001B}[32m"
-        case yellow = "\u{001B}[33m"
-        case blue = "\u{001B}[34m"
-        case magenta = "\u{001B}[35m"
-        case cyan = "\u{001B}[36m"
-        case white = "\u{001B}[37m"
+        case black = 30
+        case red = 31
+        case green = 32
+        case yellow = 33
+        case blue = 34
+        case magenta = 35
+        case cyan = 36
+        case white = 37
 
         // Foreground colors (bright/light).
-        case brightBlack = "\u{001B}[90m"
-        case brightRed = "\u{001B}[91m"
-        case brightGreen = "\u{001B}[92m"
-        case brightYellow = "\u{001B}[93m"
-        case brightBlue = "\u{001B}[94m"
-        case brightMagenta = "\u{001B}[95m"
-        case brightCyan = "\u{001B}[96m"
-        case brightWhite = "\u{001B}[97m"
+        case brightBlack = 90
+        case brightRed = 91
+        case brightGreen = 92
+        case brightYellow = 93
+        case brightBlue = 94
+        case brightMagenta = 95
+        case brightCyan = 96
+        case brightWhite = 97
 
         // Background colors.
-        case bgBlack = "\u{001B}[40m"
-        case bgRed = "\u{001B}[41m"
-        case bgGreen = "\u{001B}[42m"
-        case bgYellow = "\u{001B}[43m"
-        case bgBlue = "\u{001B}[44m"
-        case bgMagenta = "\u{001B}[45m"
-        case bgCyan = "\u{001B}[46m"
-        case bgWhite = "\u{001B}[47m"
+        case bgBlack = 40
+        case bgRed = 41
+        case bgGreen = 42
+        case bgYellow = 43
+        case bgBlue = 44
+        case bgMagenta = 45
+        case bgCyan = 46
+        case bgWhite = 47
 
         // Background colors (bright/light).
-        case bgBrightBlack = "\u{001B}[100m"
-        case bgBrightRed = "\u{001B}[101m"
-        case bgBrightGreen = "\u{001B}[102m"
-        case bgBrightYellow = "\u{001B}[103m"
-        case bgBrightBlue = "\u{001B}[104m"
-        case bgBrightMagenta = "\u{001B}[105m"
-        case bgBrightCyan = "\u{001B}[106m"
-        case bgBrightWhite = "\u{001B}[107m"
+        case bgBrightBlack = 100
+        case bgBrightRed = 101
+        case bgBrightGreen = 102
+        case bgBrightYellow = 103
+        case bgBrightBlue = 104
+        case bgBrightMagenta = 105
+        case bgBrightCyan = 106
+        case bgBrightWhite = 107
 
         // Default foreground & background  colors.
-        case standard = "\u{001B}[39m"
-        case bgStandard = "\u{001B}[49m"
+        case standard = 39
+        case bgStandard = 49
 
         public var string: String {
-            //return "\u{001B}[\(self.rawValue)m"
-            return self.rawValue
+            return "\u{001B}[\(self.rawValue)m"
         }
     }
 
