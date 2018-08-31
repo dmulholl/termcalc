@@ -16,8 +16,12 @@ func repl(argparser: ArgParser) {
     }
 
     term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
-    term.write("      Terminal Calculator")
-    term.write(" ", times: 22)
+    term.write("  ││  ", color: .brightBlack)
+    //term.write("      Terminal Calculator")
+    term.write("Terminal Calculator")
+    term.write("  ││", color: .brightBlack)
+
+    term.write(" ", times: 18)
     term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
     term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
 
