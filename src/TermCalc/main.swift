@@ -24,7 +24,7 @@ Usage: \(binary) [OPTIONS] [FLAGS]
 
 Options:
   -e, --eval <str>          Evaluate an expression and print the result.
-  -p, --precision <int>     Decimal precision of output (default: 9).
+  -p, --precision <int>     Set decimal precision of output (default: 9).
 
 Flags:
   -h, --help                Print this help text and exit.
