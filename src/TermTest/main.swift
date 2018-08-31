@@ -9,5 +9,5 @@ guard let term = Terminal() else {
 }
 
 
-term.writeln("foobar", color: .red)
-term.writeln("foobar", color: .brightRed)
+term.setColor(.red, .bgYellow)
+term.writeln("hello world!")

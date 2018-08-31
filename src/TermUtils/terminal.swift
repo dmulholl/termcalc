@@ -94,8 +94,12 @@ public class Terminal {
         ln = LineNoise()
     }
 
-    public func setColor(_ color: Color) {
-        print(color.string, terminator: "")
+    public func setColor(_ colors: Color...) {
+        if colors.count > 0 {
+            let codes = colors.map({String($0.rawValue)}).joined(separator: ";")
+            print("\u{001B}[\(codes)m", terminator: "")
+
+        }
     }
 
     public func setColor256(_ color: UInt8) {

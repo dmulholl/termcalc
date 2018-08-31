@@ -17,7 +17,6 @@ func repl(argparser: ArgParser) {
 
     term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
     term.write("  ││  ", color: .brightBlack)
-    //term.write("      Terminal Calculator")
     term.write("Terminal Calculator")
     term.write("  ││", color: .brightBlack)
 
