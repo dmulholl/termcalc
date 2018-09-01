@@ -148,11 +148,6 @@ public class Terminal {
         return LineEditor(prompt: prompt, color: color).getLine()
     }
 
-    public func getLineBasic(prompt: String, color: Color? = nil) -> String? {
-        write(prompt, color: color)
-        return readLine()
-    }
-
     public func getLineNoise(prompt: String, color: Color? = nil) throws -> String {
         do {
             let input: String

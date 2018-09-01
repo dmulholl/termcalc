@@ -16,7 +16,7 @@ let helptext = """
 Usage: \(binary) [OPTIONS] [FLAGS]
 
   TermCalc is a command line calculator. All operations are performed using
-  IEEE 754-2008 64-bit double-precision floats.
+  IEEE 754-2008 64-bit floats.
 
   If stdin is connected to a terminal, TermCalc will run in interactive mode.
   If stdin is connected to a pipe or file, TermCalc will read in a single
