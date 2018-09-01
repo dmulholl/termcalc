@@ -14,7 +14,12 @@
     acosd
     asind
     atand
+    root
 
 * add hyperbolic trig functions
 
-* implement proper root finding algorithm
+* add factorial, x!
+
+
+
+    iron.ie

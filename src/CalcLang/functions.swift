@@ -289,24 +289,28 @@ class Cbrt: Function {
 }
 
 
-// Calculate the n-th root of the specified value.
+// Calculate the principal n-th root of the specified value.
 class Root: Function {
     func call(token: Token, args: [Double]) throws -> Double {
-        guard args.count == 2 else {
+        guard args.count == 2 || args.count == 3 else {
             throw CalcLangError.arityError(
                 offset: token.offset,
                 lexeme: token.lexeme,
-                message: "expected 2 arguments, found \(args.count)"
+                message: "expected 2 or 3 arguments, found \(args.count)"
             )
         }
         let n = args[0]
         let x = args[1]
+        var precision = Double.ulpOfOne * 10
+        if args.count == 3 {
+            precision = args[2]
+        }
 
-        guard n > 0 else {
+        guard n > 0 && n.truncatingRemainder(dividingBy: 1) == 0 else {
             throw CalcLangError.mathError(
                 offset: token.offset,
                 lexeme: token.lexeme,
-                message: "only positive roots are supported"
+                message: "only positive integer roots are supported"
             )
         }
         guard x > 0 else {
@@ -317,7 +321,15 @@ class Root: Function {
             )
         }
 
-        return pow(x, 1/n)
+        // Algorithm: https://en.wikipedia.org/wiki/Nth_root_algorithm.
+        var delta: Double
+        var r = x / n
+        repeat {
+            delta = (x / pow(r, n - 1) - r) / n
+            r += delta
+        } while abs(delta) >= precision
+
+        return r
     }
 }
 

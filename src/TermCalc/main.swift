@@ -50,7 +50,9 @@ Functions:
   log2(x)                   Base-2 log of x.
   log10(x)                  Base-10 log of x.
   rad(x)                    Convert x in degrees to radians.
-  root(n,x)                 Calculate the n-th root of x.
+  root(n,x,p)               Calculate the principal n-th root of x, optionally
+                            to precision p, where n is an integer and x is
+                            positive.
   sin(x)                    Sine of x; x in radians.
   sind(x)                   Sine of x; x in degrees.
   sqrt(x)                   Square root of x.
