@@ -6,9 +6,13 @@ class LineEditor {
 
     var originalTermios = termios()
     var lineBuffer = ""
-    var cursorIndex = 0
+    var cursorPosition = 0
     var prompt = ""
     var promptCount = 0
+
+    var cursorIndex: String.Index {
+        return lineBuffer.index(lineBuffer.startIndex, offsetBy: cursorPosition)
+    }
 
     init(prompt: String, color: Terminal.Color? = nil) {
         if color == nil {
@@ -21,12 +25,8 @@ class LineEditor {
     }
 
     private func insert(char: Character) {
-        lineBuffer.insert(char, at: bufferIndex())
-        cursorIndex += 1
-    }
-
-    private func bufferIndex() -> String.Index {
-        return lineBuffer.index(lineBuffer.startIndex, offsetBy: cursorIndex)
+        lineBuffer.insert(char, at: cursorIndex)
+        cursorPosition += 1
     }
 
     private func readMultibyteChar(_ firstByte: UInt8) -> Character {
@@ -40,12 +40,12 @@ class LineEditor {
 
         // Ctrl-A: move the cursor to the beginning of the line.
         case 1:
-            cursorIndex = 0
+            cursorPosition = 0
 
         // Ctrl-B: move back.
         case 2:
-            if cursorIndex > 0 {
-                cursorIndex -= 1
+            if cursorPosition > 0 {
+                cursorPosition -= 1
             }
 
         // Ctrl-C:
@@ -55,32 +55,39 @@ class LineEditor {
         // Ctrl-D: if there is a character to the right, delete it; otherwise
         // signal EOF.
         case 4:
-            if cursorIndex < lineBuffer.count {
-                lineBuffer.remove(at: bufferIndex())
+            if cursorPosition < lineBuffer.count {
+                lineBuffer.remove(at: cursorIndex)
             } else {
                 throw TermUtilsError.eof
             }
 
         // Ctrl-E: move the cursor to the end of the line.
         case 5:
-            cursorIndex = lineBuffer.count
+            cursorPosition = lineBuffer.count
 
         // Ctrl-F: move forward.
         case 6:
-            if cursorIndex < lineBuffer.count {
-                cursorIndex += 1
+            if cursorPosition < lineBuffer.count {
+                cursorPosition += 1
             }
 
         // Ctrl-H (8) or backspace (127): if there is a character to the left,
         // delete it.
         case 8, 127:
-            if cursorIndex > 0 {
-                let location = lineBuffer.index(before: bufferIndex())
+            if cursorPosition > 0 {
+                let location = lineBuffer.index(before: cursorIndex)
                 lineBuffer.remove(at: location)
-                cursorIndex -= 1
+                cursorPosition -= 1
             }
 
         // Ctrl-K: delete all to the right.
+        case 11:
+            if cursorPosition < lineBuffer.count {
+                lineBuffer.removeLast(lineBuffer.count - cursorPosition)
+            }
+
+
+
         // Ctrl-P: previous history.
         // Ctrl-N: next history.
         // Ctrl-L: clear screen.
@@ -100,7 +107,7 @@ class LineEditor {
         output += lineBuffer
         output += "\u{001B}[0K"
         output += "\r"
-        output += "\u{001B}[\(promptCount + cursorIndex)C"
+        output += "\u{001B}[\(promptCount + cursorPosition)C"
         print(output, terminator: "")
         fflush(stdout)
     }
@@ -114,7 +121,7 @@ class LineEditor {
         }
 
         lineBuffer = ""
-        cursorIndex = 0
+        cursorPosition = 0
         refresh()
 
         while true {
