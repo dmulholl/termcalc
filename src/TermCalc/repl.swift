@@ -44,7 +44,7 @@ func repl(argparser: ArgParser) {
                 )
                 break
             }
-            term.addHistory(input)
+            term.addHistoryItem(input)
             let output = try interpreter.interpret(source: input)
             if !output.isEmpty{
                 count += 1
@@ -138,6 +138,7 @@ func repl(argparser: ArgParser) {
         } catch TermUtilsError.eof {
             print()
             term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
+            break
         } catch TermUtilsError.ctrl_c {
             print()
             term.writeln("─", color: .brightBlack, times: term.width() ?? 80)

@@ -148,11 +148,11 @@ public class Terminal {
         return try editor.getLine()
     }
 
-    public func addHistory(_ item: String) {
+    public func addHistoryItem(_ item: String) {
         history.add(item)
     }
 
-    public func setHistoryMax(_ max: UInt) {
+    public func setMaxHistoryItems(_ max: UInt) {
         history.max = max
     }
 }

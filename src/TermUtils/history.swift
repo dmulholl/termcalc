@@ -17,15 +17,12 @@ class History {
     }
 
     func add(_ item: String) {
-
-        // Don't add a duplicate of the last item.
         if let last = items.last {
             if last == item {
                 return
             }
         }
 
-        // If we're at maximum capacity remove the oldest entry.
         if max != nil && items.count >= max! {
             _ = items.removeFirst()
         }
