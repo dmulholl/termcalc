@@ -8,6 +8,6 @@ guard let term = Terminal() else {
     exit(1)
 }
 
-
-term.setColor(.red, .bgYellow)
-term.writeln("hello world!")
+let output = try term.getLine(prompt: "> ", color: .red)
+print()
+print("output: \(output)")

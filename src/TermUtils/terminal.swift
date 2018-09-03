@@ -88,7 +88,7 @@ public class Terminal {
     private var ln: LineNoise
 
     public init?() {
-        if isatty(fileno(stdout)) == 0 {
+        if isatty(fileno(stdout)) == 0 || isatty(fileno(stdin)) == 0 {
             return nil
         }
         ln = LineNoise()
@@ -144,8 +144,8 @@ public class Terminal {
         return nil
     }
 
-    public func getLine(prompt: String, color: Color? = nil) -> String {
-        return LineEditor(prompt: prompt, color: color).getLine()
+    public func getLine(prompt: String, color: Color? = nil) throws -> String {
+        return try LineEditor(prompt: prompt, color: color).getLine()
     }
 
     public func getLineNoise(prompt: String, color: Color? = nil) throws -> String {
