@@ -1,6 +1,6 @@
 
 import Foundation
-import LineNoise
+
 
 public class Terminal {
 
@@ -85,13 +85,12 @@ public class Terminal {
         }
     }
 
-    private var ln: LineNoise
+    private var history = History()
 
     public init?() {
         if isatty(fileno(stdout)) == 0 || isatty(fileno(stdin)) == 0 {
             return nil
         }
-        ln = LineNoise()
     }
 
     public func setColor(_ colors: Color...) {
@@ -145,27 +144,15 @@ public class Terminal {
     }
 
     public func getLine(prompt: String, color: Color? = nil) throws -> String {
-        return try LineEditor(prompt: prompt, color: color).getLine()
+        let editor = LineEditor(prompt: prompt, color: color, history: history)
+        return try editor.getLine()
     }
 
-    public func getLineNoise(prompt: String, color: Color? = nil) throws -> String {
-        do {
-            let input: String
-            if color == nil {
-                input = try ln.getLine(prompt: prompt)
-            } else {
-                let promptstr = "\(color!.string)\(prompt)\(Color.reset.string)"
-                ln.promptDelta =  promptstr.count - prompt.count
-                input = try ln.getLine(prompt: promptstr)
-            }
-            ln.addHistory(input)
-            return input
-        } catch LinenoiseError.EOF {
-            throw TermUtilsError.eof
-        } catch LinenoiseError.CTRL_C {
-            throw TermUtilsError.ctrl_c
-        } catch LinenoiseError.generalError(let message) {
-            throw TermUtilsError.linenoise(message)
-        }
+    public func addHistory(_ item: String) {
+        history.add(item)
+    }
+
+    public func setHistoryMax(_ max: UInt) {
+        history.max = max
     }
 }

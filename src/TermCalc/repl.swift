@@ -29,7 +29,7 @@ func repl(argparser: ArgParser) {
 
     while true {
         do {
-            let input = try term.getLineNoise(
+            let input = try term.getLine(
                 prompt: "  >>  ",
                 color: .brightBlack
             )
@@ -44,6 +44,7 @@ func repl(argparser: ArgParser) {
                 )
                 break
             }
+            term.addHistory(input)
             let output = try interpreter.interpret(source: input)
             if !output.isEmpty{
                 count += 1
@@ -136,14 +137,11 @@ func repl(argparser: ArgParser) {
             term.writeln("Error: \(message).")
         } catch TermUtilsError.eof {
             print()
-            continue
+            term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
         } catch TermUtilsError.ctrl_c {
             print()
             term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
             break
-        } catch TermUtilsError.linenoise(let message){
-            term.write("  !>  ", color: .brightBlack)
-            print("Error: \(message)")
         } catch {
             term.write("  !>  ", color: .brightBlack)
             print("Error: \(error)")

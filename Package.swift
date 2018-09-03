@@ -14,10 +14,6 @@ let package = Package(
             url: "https://github.com/dmulholland/janus-swift.git",
             from: "1.0.0"
         ),
-        .package(
-            url: "https://github.com/dmulholland/linenoise-swift.git",
-            from: "0.0.5"
-        ),
     ],
     targets: [
         .target(
@@ -28,7 +24,7 @@ let package = Package(
             dependencies: ["CalcLang", "Janus", "TermUtils"]),
         .target(
             name: "TermUtils",
-            dependencies: ["LineNoise"]),
+            dependencies: []),
         .target(
             name: "TermTest",
             dependencies: ["TermUtils"]),

@@ -6,122 +6,43 @@ class LineEditor {
 
     var originalTermios = termios()
     var lineBuffer = ""
-    var cursorPosition = 0
+    var cursorOffset = 0
     var prompt = ""
-    var promptCount = 0
+    var promptLength = 0
+    var history: History
+    var historyBuffer: String? = nil
 
     var cursorIndex: String.Index {
-        return lineBuffer.index(lineBuffer.startIndex, offsetBy: cursorPosition)
+        return lineBuffer.index(lineBuffer.startIndex, offsetBy: cursorOffset)
     }
 
-    init(prompt: String, color: Terminal.Color? = nil) {
+    init(prompt: String, color: Terminal.Color? = nil, history: History) {
         if color == nil {
             self.prompt = prompt
         } else {
             let reset = Terminal.Color.standard
             self.prompt = "\(color!.string)\(prompt)\(reset.string)"
         }
-        self.promptCount = prompt.count
+        self.promptLength = prompt.count
+        self.history = history
     }
 
-    private func insert(char: Character) {
-        lineBuffer.insert(char, at: cursorIndex)
-        cursorPosition += 1
-    }
-
-    private func readMultibyteChar(_ firstByte: UInt8) -> Character {
-        var buffer = [UInt8]()
-        buffer.append(firstByte)
+    private func readMultibyteChar(_ firstByte: UInt8) -> Character? {
+        // var charbuf = [UInt8]()
+        // charbuf.append(firstByte)
         return Character("?")
     }
 
-    private func handleControlChar(_ byte: UInt8) throws {
-        switch byte {
-
-        // Ctrl-A: move the cursor to the beginning of the line.
-        case 1:
-            cursorPosition = 0
-
-        // Ctrl-B: move back.
-        case 2:
-            if cursorPosition > 0 {
-                cursorPosition -= 1
-            }
-
-        // Ctrl-C:
-        case 3:
-            throw TermUtilsError.ctrl_c
-
-        // Ctrl-D: if there is a character to the right, delete it; otherwise
-        // signal EOF.
-        case 4:
-            if cursorPosition < lineBuffer.count {
-                lineBuffer.remove(at: cursorIndex)
-            } else {
-                throw TermUtilsError.eof
-            }
-
-        // Ctrl-E: move the cursor to the end of the line.
-        case 5:
-            cursorPosition = lineBuffer.count
-
-        // Ctrl-F: move forward.
-        case 6:
-            if cursorPosition < lineBuffer.count {
-                cursorPosition += 1
-            }
-
-        // Ctrl-H (8) or backspace (127): if there is a character to the left,
-        // delete it.
-        case 8, 127:
-            if cursorPosition > 0 {
-                let location = lineBuffer.index(before: cursorIndex)
-                lineBuffer.remove(at: location)
-                cursorPosition -= 1
-            }
-
-        // Ctrl-K: delete all to the right.
-        case 11:
-            if cursorPosition < lineBuffer.count {
-                lineBuffer.removeLast(lineBuffer.count - cursorPosition)
-            }
-
-
-
-        // Ctrl-P: previous history.
-        // Ctrl-N: next history.
-        // Ctrl-L: clear screen.
-        // Ctrl-T: swap character with previous.
-        // Ctrl-U: delete all to the left.
-        // Ctrl-W: delete previous word.
-        // Backspace. 127
-        // Escape: 27.
-        default:
-            break
-        }
-    }
-
-    private func refresh() {
-        var output = "\r"
-        output += prompt
-        output += lineBuffer
-        output += "\u{001B}[0K"
-        output += "\r"
-        output += "\u{001B}[\(promptCount + cursorPosition)C"
-        print(output, terminator: "")
-        fflush(stdout)
-    }
-
     func getLine() throws -> String {
-        let inRaw = enterRawMode()
+        let inRawMode = enterRawMode()
         defer {
-            if inRaw {
+            if inRawMode {
                 _ = exitRawMode()
             }
         }
 
         lineBuffer = ""
-        cursorPosition = 0
+        cursorOffset = 0
         refresh()
 
         while true {
@@ -139,7 +60,7 @@ class LineEditor {
                 try handleControlChar(byte)
             }
 
-            // Simple ascii characters.
+            // Printable ascii characters.
             else if byte < 127 {
                 let char = Character(UnicodeScalar(byte))
                 insert(char: char)
@@ -152,7 +73,9 @@ class LineEditor {
 
             // The byte must be the first of a multibyte utf8 character.
             else {
-                let char = readMultibyteChar(byte)
+                guard let char = readMultibyteChar(byte) else {
+                    continue
+                }
                 insert(char: char)
             }
 
@@ -199,6 +122,182 @@ class LineEditor {
         return count == 0 ? nil : byte
     }
 
+    private func insert(char: Character) {
+        lineBuffer.insert(char, at: cursorIndex)
+        cursorOffset += 1
+    }
 
+    private func handleControlChar(_ byte: UInt8) throws {
+        switch byte {
 
+        // Ctrl-A: move the cursor to the beginning of the line.
+        case 1:
+            cursorOffset = 0
+
+        // Ctrl-B: move back.
+        case 2:
+            if cursorOffset > 0 {
+                cursorOffset -= 1
+            }
+
+        // Ctrl-C:
+        case 3:
+            throw TermUtilsError.ctrl_c
+
+        // Ctrl-D: if there is a character to the right, delete it; otherwise
+        // signal EOF.
+        case 4:
+            if cursorOffset < lineBuffer.count {
+                lineBuffer.remove(at: cursorIndex)
+            } else {
+                throw TermUtilsError.eof
+            }
+
+        // Ctrl-E: move the cursor to the end of the line.
+        case 5:
+            cursorOffset = lineBuffer.count
+
+        // Ctrl-F: move forward.
+        case 6:
+            if cursorOffset < lineBuffer.count {
+                cursorOffset += 1
+            }
+
+        // Ctrl-H (8 = ascii backspace) or keyboard backspace (127 = ascii
+        // delete): if there is a character to the left, delete it.
+        case 8, 127:
+            if cursorOffset > 0 {
+                let location = lineBuffer.index(before: cursorIndex)
+                lineBuffer.remove(at: location)
+                cursorOffset -= 1
+            }
+
+        // Ctrl-K: delete all to the right.
+        case 11:
+            if cursorOffset < lineBuffer.count {
+                lineBuffer.removeLast(lineBuffer.count - cursorOffset)
+            }
+
+        // Ctrl-L: clear screen and move the cursor to the home position.
+        case 12:
+            print("\u{001B}[2J\u{001B}[H", terminator: "")
+            fflush(stdout)
+
+        // Ctrl-U: delete all to the left.
+        case 21:
+            if cursorOffset > 0 {
+                lineBuffer.removeFirst(cursorOffset)
+                cursorOffset = 0
+            }
+
+        // Ctrl-W: delete previous word.
+        case 23:
+            var index = cursorIndex
+
+            // Work backwards to find the first non-space character.
+            while index > lineBuffer.startIndex {
+                if lineBuffer[lineBuffer.index(before: index)] == " " {
+                    index = lineBuffer.index(before: index)
+                } else {
+                    break
+                }
+            }
+
+            // Work backwards to find the first space character.
+            while index > lineBuffer.startIndex {
+                if lineBuffer[lineBuffer.index(before: index)] != " " {
+                    index = lineBuffer.index(before: index)
+                } else {
+                    break
+                }
+            }
+
+            let distance = lineBuffer.distance(from: index, to: cursorIndex)
+            if distance > 0 {
+                lineBuffer.removeSubrange(index ..< cursorIndex)
+                cursorOffset -= distance
+            }
+
+        // Escape.
+        case 27:
+            guard let next1 = readByte() else { break }
+            guard let next2 = readByte() else { break }
+            guard next1 == 91 else { break }
+
+            switch next2 {
+
+            // Up cursor key.
+            case 65:
+                historyPrevious()
+
+            // Down cursor key.
+            case 66:
+                historyNext()
+
+            // Right cursor key.
+            case 67:
+                if cursorOffset < lineBuffer.count {
+                    cursorOffset += 1
+                }
+
+            // Left cursor key.
+            case 68:
+                if cursorOffset > 0 {
+                    cursorOffset -= 1
+                }
+
+            default:
+                break
+            }
+
+        // Ctrl-N: next history.
+        case 14:
+            historyNext()
+
+        // Ctrl-P: previous history.
+        case 16:
+            historyPrevious()
+
+        default:
+            break
+        }
+    }
+
+    private func refresh() {
+        var output = "\r"
+        output += prompt
+        output += lineBuffer
+        output += "\u{001B}[0K" // erase right
+        output += "\r"
+        output += "\u{001B}[\(promptLength + cursorOffset)C" // move cursor
+        print(output, terminator: "")
+        fflush(stdout)
+    }
+
+    private func historyNext() {
+        if let item = history.next() {
+            lineBuffer = item
+            if cursorOffset > item.count {
+                cursorOffset = item.count
+            }
+        } else if let stashed = historyBuffer {
+            lineBuffer = stashed
+            if cursorOffset > stashed.count {
+                cursorOffset = stashed.count
+            }
+            historyBuffer = nil
+        }
+    }
+
+    private func historyPrevious() {
+        if history.isAtEnd {
+            historyBuffer = lineBuffer
+        }
+        if let item = history.previous() {
+            lineBuffer = item
+            if cursorOffset > item.count {
+                cursorOffset = item.count
+            }
+        }
+    }
 }
