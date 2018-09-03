@@ -28,8 +28,6 @@ class LineEditor {
     }
 
     private func readMultibyteChar(_ firstByte: UInt8) -> Character? {
-        // var charbuf = [UInt8]()
-        // charbuf.append(firstByte)
         return Character("?")
     }
 
@@ -43,6 +41,7 @@ class LineEditor {
 
         lineBuffer = ""
         cursorOffset = 0
+        historyBuffer = nil
         refresh()
 
         while true {
@@ -66,7 +65,7 @@ class LineEditor {
                 insert(char: char)
             }
 
-            // Backspace.
+            // Backspace key.
             else if byte == 127 {
                 try handleControlChar(byte)
             }

@@ -1,3 +1,6 @@
+// -----------------------------------------------------------------------------
+// TermUtils: a terminal utility library for building command line programs.
+// -----------------------------------------------------------------------------
 
 import Foundation
 
