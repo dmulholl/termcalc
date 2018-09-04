@@ -119,8 +119,10 @@ class LineEditor {
     }
 
     private func insert(string: String) {
+        let count = lineBuffer.count
         lineBuffer.insert(contentsOf: string, at: cursorIndex)
-        cursorOffset += string.count
+        let delta = lineBuffer.count - count
+        cursorOffset += delta
     }
 
     private func handleControlChar(_ byte: UInt8) throws {
