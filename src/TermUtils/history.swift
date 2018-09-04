@@ -3,6 +3,7 @@ class History {
 
     private var items = [String]()
     private var index = 0
+    private var stash: String? = nil
 
     var max: UInt? = nil {
         didSet {
@@ -10,10 +11,6 @@ class History {
                 items.removeFirst(items.count - Int(max!))
             }
         }
-    }
-
-    var isAtEnd: Bool {
-        return index == items.count
     }
 
     func add(_ item: String) {
@@ -31,9 +28,12 @@ class History {
         index = items.count
     }
 
-    func previous() -> String? {
+    func previous(current: String) -> String? {
         if items.count == 0 {
             return nil
+        }
+        if index == items.count {
+            stash = current
         }
         index -= 1
         if index < 0 {
@@ -50,6 +50,10 @@ class History {
         index += 1
         if index >= items.count {
             index = items.count
+            if let item = stash {
+                stash = nil
+                return item
+            }
             return nil
         }
         return items[index]

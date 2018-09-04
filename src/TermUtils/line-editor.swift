@@ -10,7 +10,6 @@ class LineEditor {
     var prompt = ""
     var promptLength = 0
     var history: History
-    var historyBuffer: String? = nil
 
     var cursorIndex: String.Index {
         return lineBuffer.index(lineBuffer.startIndex, offsetBy: cursorOffset)
@@ -41,7 +40,6 @@ class LineEditor {
 
         lineBuffer = ""
         cursorOffset = 0
-        historyBuffer = nil
         refresh()
 
         while true {
@@ -279,20 +277,11 @@ class LineEditor {
             if cursorOffset > item.count {
                 cursorOffset = item.count
             }
-        } else if let stashed = historyBuffer {
-            lineBuffer = stashed
-            if cursorOffset > stashed.count {
-                cursorOffset = stashed.count
-            }
-            historyBuffer = nil
         }
     }
 
     private func historyPrevious() {
-        if history.isAtEnd {
-            historyBuffer = lineBuffer
-        }
-        if let item = history.previous() {
+        if let item = history.previous(current: lineBuffer) {
             lineBuffer = item
             if cursorOffset > item.count {
                 cursorOffset = item.count
