@@ -141,11 +141,11 @@ class LineEditor {
             throw TermUtilsError.ctrl_c
 
         // Ctrl-D: if there is a character to the right, delete it; otherwise
-        // signal EOF.
+        // signal EOF, but only if the buffer is empty.
         case 4:
             if cursorOffset < lineBuffer.count {
                 lineBuffer.remove(at: cursorIndex)
-            } else {
+            } else if lineBuffer.isEmpty {
                 throw TermUtilsError.eof
             }
 
