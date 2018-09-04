@@ -26,6 +26,7 @@ class History {
 
         items.append(item)
         index = items.count
+        stash = nil
     }
 
     func previous(current: String) -> String? {
@@ -57,5 +58,15 @@ class History {
             return nil
         }
         return items[index]
+    }
+
+    func save(toFile path: String) throws {
+        let content = items.joined(separator: "\n")
+        try content.write(toFile: path, atomically: true, encoding: .utf8)
+    }
+
+    func load(fromFile path: String) throws {
+        let content = try String(contentsOfFile: path, encoding: .utf8)
+        content.split(separator: "\n").forEach { add(String($0)) }
     }
 }

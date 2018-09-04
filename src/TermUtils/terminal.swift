@@ -162,4 +162,12 @@ public class Terminal {
     public func setMaxHistoryItems(_ max: UInt) {
         history.max = max
     }
+
+    public func loadHistory(fromFile path: String) throws {
+        try history.load(fromFile: path)
+    }
+
+    public func saveHistory(toFile path: String) throws {
+        try history.save(toFile: path)
+    }
 }
