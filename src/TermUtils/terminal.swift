@@ -147,7 +147,11 @@ public class Terminal {
     }
 
     public func getLine(prompt: String, color: Color? = nil) throws -> String {
-        let editor = LineEditor(prompt: prompt, color: color, history: history)
+        let editor = LineEditor(
+            prompt: prompt,
+            color: color,
+            history: history
+        )
         return try editor.getLine()
     }
 
