@@ -26,10 +26,6 @@ class LineEditor {
         self.history = history
     }
 
-    private func readMultibyteChar(_ firstByte: UInt8) -> Character? {
-        return Character("?")
-    }
-
     func getLine() throws -> String {
         let inRawMode = enterRawMode()
         defer {
@@ -70,10 +66,8 @@ class LineEditor {
 
             // The byte must be the first of a multibyte utf8 character.
             else {
-                guard let char = readMultibyteChar(byte) else {
-                    continue
-                }
-                insert(char: char)
+                let string = readMultiByteUtf8(firstByte: byte)
+                insert(string: string)
             }
 
             refresh()
@@ -122,6 +116,11 @@ class LineEditor {
     private func insert(char: Character) {
         lineBuffer.insert(char, at: cursorIndex)
         cursorOffset += 1
+    }
+
+    private func insert(string: String) {
+        lineBuffer.insert(contentsOf: string, at: cursorIndex)
+        cursorOffset += string.count
     }
 
     private func handleControlChar(_ byte: UInt8) throws {
@@ -269,6 +268,40 @@ class LineEditor {
         output += "\u{001B}[\(promptLength + cursorOffset)C" // move cursor
         print(output, terminator: "")
         fflush(stdout)
+    }
+
+    private func readMultiByteUtf8(firstByte: UInt8) -> String {
+        var buf = [firstByte]
+
+        // Check for a two-byte utf8 character.
+        if firstByte & 0b1110_0000 == 0b1100_0000 {
+            if let b2 = readByte() {
+                buf.append(b2)
+                return String(data: Data(buf), encoding: .utf8) ?? "?"
+            }
+        }
+
+        // Check for a three-byte utf8 character.
+        else if firstByte & 0b1111_0000 == 0b1110_0000 {
+            if let b2 = readByte(), let b3 = readByte() {
+                buf.append(b2)
+                buf.append(b3)
+                return String(data: Data(buf), encoding: .utf8) ?? "?"
+            }
+        }
+
+        // Check for a four-byte utf8 character.
+        else if firstByte & 0b1111_1000 == 0b1111_0000 {
+            if let b2 = readByte(), let b3 = readByte(), let b4 = readByte() {
+                buf.append(b2)
+                buf.append(b3)
+                buf.append(b4)
+                return String(data: Data(buf), encoding: .utf8) ?? "?"
+            }
+        }
+
+        // Not a valid utf8 encoding.
+        return "?"
     }
 
     private func historyNext() {
