@@ -115,16 +115,46 @@ class Parser {
     }
 
     private func primary() throws -> Expr {
-        if match(.integer, .float) {
+        if match(.float) {
             let token = next()
             if let value = Double(token.lexeme) {
                 return LiteralExpr(value)
-            } else {
-                throw CalcLangError.unparsableLiteral(
-                    offset: token.offset,
-                    lexeme: token.lexeme
-                )
             }
+            throw CalcLangError.unparsableLiteral(
+                offset: token.offset,
+                lexeme: token.lexeme
+            )
+        } else if match(.integer) {
+            let token = next()
+            if token.lexeme.starts(with: "0b") {
+                let literal = String(token.lexeme.dropFirst(2))
+                if let value = Int64(literal, radix: 2) {
+                    return LiteralExpr(Double(value))
+                }
+            } else if token.lexeme.starts(with: "0o") {
+                let literal = String(token.lexeme.dropFirst(2))
+                if let value = Int64(literal, radix: 8) {
+                    return LiteralExpr(Double(value))
+                }
+            } else if token.lexeme.starts(with: "0d") {
+                let literal = String(token.lexeme.dropFirst(2))
+                if let value = Int64(literal, radix: 10) {
+                    return LiteralExpr(Double(value))
+                }
+            } else if token.lexeme.starts(with: "0x") {
+                let literal = String(token.lexeme.dropFirst(2))
+                if let value = Int64(literal, radix: 16) {
+                    return LiteralExpr(Double(value))
+                }
+            } else {
+                if let value = Int64(token.lexeme) {
+                    return LiteralExpr(Double(value))
+                }
+            }
+            throw CalcLangError.unparsableLiteral(
+                offset: token.offset,
+                lexeme: token.lexeme
+            )
         } else if match(.leftparen) {
             let _ = next()
             let expr = try expression()
