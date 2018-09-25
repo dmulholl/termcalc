@@ -89,6 +89,8 @@ public class Interpreter {
             return try evalAssign(assignment)
         } else if let call = expr as? CallExpr {
             return try evalCall(call)
+        } else if let factorial = expr as? FactorialExpr {
+            return try evalFactorial(factorial)
         }
         print("eval: unreachable")
         exit(1)
@@ -246,6 +248,35 @@ public class Interpreter {
                 lexeme: expr.callee.name.lexeme,
                 message: "result is not a representable number (NaN)"
             )
+        }
+        return result
+    }
+
+    private func evalFactorial(_ expr: FactorialExpr) throws -> Double {
+        var n = try eval(expr.leftexpr)
+        if n == 0 {
+            return 1
+        }
+
+        guard n > 0 && n.truncatingRemainder(dividingBy: 1) == 0 else {
+            throw CalcLangError.mathError(
+                offset: expr.optoken.offset,
+                lexeme: expr.optoken.lexeme,
+                message: "factorial operator supports only positive integers"
+            )
+        }
+
+        var result: Double = 1
+        while n > 0 {
+            result *= n
+            n -= 1
+            if result.isInfinite {
+                throw CalcLangError.mathError(
+                    offset: expr.optoken.offset,
+                    lexeme: expr.optoken.lexeme,
+                    message: "factorial results in overflow"
+                )
+            }
         }
         return result
     }

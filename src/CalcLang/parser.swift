@@ -85,10 +85,19 @@ class Parser {
     private func unary() throws -> Expr {
         if match(.plus, .minus) {
             let optoken = next()
-            let rightexpr = try unary()
+            let rightexpr = try factorial()
             return UnaryExpr(optoken, rightexpr)
         }
-        return try call()
+        return try factorial()
+    }
+
+    private func factorial() throws -> Expr {
+        var expr = try call()
+        while match(.bang) {
+            let optoken = next()
+            expr = FactorialExpr(expr, optoken)
+        }
+        return expr
     }
 
     private func call() throws -> Expr {

@@ -34,6 +34,8 @@ class Scanner {
             addToken(type: .comma)
         } else if char == "=" {
             addToken(type: .equal)
+        } else if char == "!" {
+            addToken(type: .bang)
         }
 
         // Single or double-character tokens.

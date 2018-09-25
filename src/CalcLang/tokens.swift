@@ -20,7 +20,7 @@ extension Token: Equatable {
 
 
 enum TokenType {
-    case leftparen, rightparen, comma
+    case leftparen, rightparen, comma, bang
     case plus, minus, star, slash, modulo, caret, equal
     case plusequal, minusequal, starequal, slashequal, moduloequal, caretequal
     case identifier, integer, float

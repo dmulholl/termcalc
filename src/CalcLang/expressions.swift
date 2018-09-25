@@ -78,3 +78,14 @@ class CallExpr: Expr {
         self.arguments = arguments
     }
 }
+
+
+class FactorialExpr: Expr {
+    let optoken: Token
+    let leftexpr: Expr
+
+    init(_ leftexpr: Expr, _ optoken: Token) {
+        self.leftexpr = leftexpr
+        self.optoken = optoken
+    }
+}

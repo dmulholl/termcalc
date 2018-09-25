@@ -54,7 +54,7 @@ func repl(argparser: ArgParser) {
                 term.write("  =>  ", color: .brightBlack)
                 term.write(result)
                 let spaces = width - 6 - result.count - resultID.count - 2
-                term.write(" ", times: spaces)
+                term.write(" ", times: spaces <= 0 ? 1 : spaces)
                 term.writeln(resultID, color: .brightBlack)
             }
         } catch CalcLangError.invalidCharacter(let offset, let char) {
