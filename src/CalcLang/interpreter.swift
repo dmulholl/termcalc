@@ -262,7 +262,7 @@ public class Interpreter {
             throw CalcLangError.mathError(
                 offset: expr.optoken.offset,
                 lexeme: expr.optoken.lexeme,
-                message: "factorial operator supports only positive integers"
+                message: "factorials are defined for positive integers only"
             )
         }
 
