@@ -20,5 +20,3 @@
     5e5 = 5 * 10^5 notation
 
 * add hyperbolic trig functions
-
-* add factorial, x!
