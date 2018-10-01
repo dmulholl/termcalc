@@ -51,14 +51,10 @@ public class Interpreter {
         let parser = Parser(tokens)
         let expr = try parser.parse()
         let value = try eval(expr)
-        if expr is AssignExpr {
-            return ""
-        } else {
-            count += 1
-            variables["$\(count)"] = value
-            variables["$"] = value
-            return stringify(value)
-        }
+        count += 1
+        variables["$\(count)"] = value
+        variables["$"] = value
+        return stringify(value)
     }
 
     private func stringify(_ value: Double) -> String {
