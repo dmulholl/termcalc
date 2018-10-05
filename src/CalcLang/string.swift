@@ -10,6 +10,11 @@ let octalCharacters = CharacterSet(charactersIn: "01234567")
 let hexCharacters = CharacterSet(charactersIn: "0123456789abcdefABCDEF")
 
 
+let identifierCharacters = CharacterSet.alphanumerics.union(
+    CharacterSet(charactersIn: "_")
+)
+
+
 extension String {
 
     func isAlpha() -> Bool {
@@ -28,6 +33,12 @@ extension String {
         return
             !isEmpty &&
             rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) == nil
+    }
+
+    func isValidIdentfier() -> Bool {
+        return
+            !isEmpty &&
+            rangeOfCharacter(from: identifierCharacters.inverted) == nil
     }
 
     func isWhitespace() -> Bool {

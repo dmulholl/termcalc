@@ -228,7 +228,7 @@ class Scanner {
 
     private func readIdentifier() {
         while true {
-            if isAtEnd() || !String(peek()!).isAlphanumeric() {
+            if isAtEnd() || !String(peek()!).isValidIdentfier() {
                 break
             }
             _ = next()
