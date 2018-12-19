@@ -28,7 +28,3 @@
 * add hyperbolic trig functions
 
 * support floats beginning with .
-
-* add support for basic stats functions
-
-* support arrays and multiline input?

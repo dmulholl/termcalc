@@ -15,33 +15,28 @@ func repl(argparser: ArgParser) {
         exit(1)
     }
 
-    term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
+    let cols = term.width() ?? 80
+
+    term.writeln("─", color: .brightBlack, times: cols)
     term.write("  ││  ", color: .brightBlack)
     term.write("Terminal Calculator")
     term.write("  ││", color: .brightBlack)
-
-    term.write(" ", times: 22)
+    term.write(" ", times: cols - 58)
     term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
-    term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
+    term.writeln("─", color: .brightBlack, times: cols)
 
     let interpreter = Interpreter(precision: argparser.getInt("precision"))
     var count = 0
 
     while true {
         do {
-            let input = try term.getLine(
-                prompt: "  >>  ",
-                color: .brightBlack
-            )
+            let input = try term.getLine(prompt: "  >>  ", color: .brightBlack)
             print()
             if input.trimmingCharacters(in: .whitespaces).isEmpty {
                 continue
             }
             if input == "q" || input == "quit" {
-                term.writeln("─",
-                    color: .brightBlack,
-                    times: term.width() ?? 80
-                )
+                term.writeln("─", color: .brightBlack, times: cols)
                 break
             }
             term.addHistoryItem(input)
@@ -50,10 +45,9 @@ func repl(argparser: ArgParser) {
                 count += 1
                 let result = "\(output)"
                 let resultID = "$\(count)"
-                let width = term.width() ?? 80
                 term.write("  =>  ", color: .brightBlack)
                 term.write(result)
-                let spaces = width - 6 - result.count - resultID.count - 2
+                let spaces = cols - 6 - result.count - resultID.count - 2
                 term.write(" ", times: spaces <= 0 ? 1 : spaces)
                 term.writeln(resultID, color: .brightBlack)
             }
@@ -137,11 +131,11 @@ func repl(argparser: ArgParser) {
             term.writeln("Error: \(message).")
         } catch TermUtilsError.eof {
             print()
-            term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
+            term.writeln("─", color: .brightBlack, times: cols)
             break
         } catch TermUtilsError.ctrl_c {
             print()
-            term.writeln("─", color: .brightBlack, times: term.width() ?? 80)
+            term.writeln("─", color: .brightBlack, times: cols)
             break
         } catch {
             term.write("  !>  ", color: .brightBlack)
