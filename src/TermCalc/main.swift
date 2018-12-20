@@ -69,7 +69,7 @@ argparser.parse()
 
 if argparser.found("eval") {
     eval(argparser: argparser, source: argparser.getString("eval"))
-} else if Terminal.isTerminalStdin() {
+} else if Terminal.isTermStdin() && Terminal.isTermStdout(){
     repl(argparser: argparser)
 } else if let input = readLine() {
     eval(argparser: argparser, source: input)

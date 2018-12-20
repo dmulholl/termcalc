@@ -13,15 +13,15 @@ public class Terminal {
         }
     }
 
-    public static func isTerminalStdin() -> Bool {
+    public static func isTermStdin() -> Bool {
         return isatty(fileno(stdin)) != 0
     }
 
-    public static func isTerminalStdout() -> Bool {
+    public static func isTermStdout() -> Bool {
         return isatty(fileno(stdout)) != 0
     }
 
-    public static func isTerminalStderr() -> Bool {
+    public static func isTermStderr() -> Bool {
         return isatty(fileno(stderr)) != 0
     }
 
@@ -90,11 +90,13 @@ public class Terminal {
 
     private var history = History()
 
-    public init?() {
-        if isatty(fileno(stdout)) == 0 || isatty(fileno(stdin)) == 0 {
-            return nil
-        }
-    }
+    public init() {}
+
+    // public init?() {
+    //     if isatty(fileno(stdout)) == 0 || isatty(fileno(stdin)) == 0 {
+    //         return nil
+    //     }
+    // }
 
     public func setColor(_ colors: Color...) {
         if colors.count > 0 {

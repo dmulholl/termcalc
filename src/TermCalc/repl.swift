@@ -9,12 +9,7 @@ import CalcLang
 
 
 func repl(argparser: ArgParser) {
-    guard let term = Terminal() else {
-        let text = "interactive mode requires that stdout be a terminal"
-        Terminal.writeErr("Error: \(text).\n")
-        exit(1)
-    }
-
+    let term = Terminal()
     let cols = term.width() ?? 80
 
     term.writeln("─", color: .brightBlack, times: cols)
@@ -81,11 +76,11 @@ func repl(argparser: ArgParser) {
             if lexeme.isEmpty {
                 term.writeln("^", color: .red)
                 term.write("  !>  ", color: .brightBlack)
-                term.writeln("Error: expected an expression.")
+                term.writeln("Error: expected expression.")
             } else {
                 term.writeln("^", color: .red, times: lexeme.count)
                 term.write("  !>  ", color: .brightBlack)
-                term.writeln("Error: expected an expression, found '\(lexeme)'.")
+                term.writeln("Error: expected expression, found '\(lexeme)'.")
             }
         } catch CalcLangError.expectToken(let offset, let lexeme, let expect) {
             term.write("  !>  ", color: .brightBlack)

@@ -89,6 +89,7 @@ class Tan: Function {
     }
 }
 
+
 // Calculate the sine of an angle specified in degrees.
 class Sind: Function {
     func call(token: Token, args: [Double]) throws -> Double {
@@ -206,7 +207,6 @@ class Acosd: Function {
         return radians * 180 / Double.pi
     }
 }
-
 
 
 // Calculate inverse sine of the specified value; result in degrees.

@@ -14,6 +14,12 @@ final class InterpreterTests: XCTestCase {
         let output = try! interpreter.interpret(source: "99.99")
         XCTAssertEqual(output, "99.99")
     }
+    
+    func testDotFloatLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: ".99")
+        XCTAssertEqual(output, "0.99")
+    }
 
     func testIntegerLiteralWithTrailingZeros() {
         let interpreter = Interpreter()
