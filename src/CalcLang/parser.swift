@@ -133,6 +133,16 @@ class Parser {
                 offset: token.offset,
                 lexeme: token.lexeme
             )
+        }
+        else if match(.dotfloat) {
+            let token = next()
+            if let value = Double("0" + token.lexeme) {
+                return LiteralExpr(value)
+            }
+            throw CalcLangError.unparsableLiteral(
+                offset: token.offset,
+                lexeme: token.lexeme
+            )
         } else if match(.integer) {
             let token = next()
             if token.lexeme.starts(with: "0b") {

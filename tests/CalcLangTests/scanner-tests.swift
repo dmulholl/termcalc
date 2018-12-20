@@ -93,6 +93,16 @@ final class ScannerTests: XCTestCase {
         XCTAssertEqual(tokens, expect)
     }
 
+    func testDotFloat() {
+        let scanner = Scanner(".456")
+        let tokens = try! scanner.scan()
+        let expect = [
+            Token(type: .dotfloat, lexeme: ".456", offset: 0),
+            Token(type: .eof, lexeme: "", offset: 4),
+        ]
+        XCTAssertEqual(tokens, expect)
+    }
+
     func testIdentifier() {
         let scanner = Scanner("foo")
         let tokens = try! scanner.scan()

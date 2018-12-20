@@ -85,21 +85,26 @@ class Scanner {
         // Integer literals with a base specifier.
         else if char == "0" {
             if match("b") {
-                readBinaryIntLiteral()
+                readBinaryInt()
             } else if match("o") {
-                readOctalIntLiteral()
+                readOctalInt()
             } else if match("d") {
-                readDecimalIntLiteral()
+                readDecimalInt()
             } else if match("x") {
-                readHexIntLiteral()
+                readHexInt()
             } else {
-                readNumberLiteral()
+                readIntOrFloat()
             }
         }
 
         // Decimal integer or float.
         else if String(char).isDecimal() {
-            readNumberLiteral()
+            readIntOrFloat()
+        }
+
+        // Float literals beginning with a '.'.
+        else if char == "." && String(peek()!).isDecimal() {
+            readDotFloat()
         }
 
         // Identifiers & keywords.
@@ -150,35 +155,35 @@ class Scanner {
         return true
     }
 
-    private func readBinaryIntLiteral() {
+    private func readBinaryInt() {
         while !isAtEnd() && String(peek()!).isBinary() {
             _ = next()
         }
         addToken(type: .integer)
     }
 
-    private func readOctalIntLiteral() {
+    private func readOctalInt() {
         while !isAtEnd() && String(peek()!).isOctal() {
             _ = next()
         }
         addToken(type: .integer)
     }
 
-    private func readDecimalIntLiteral() {
+    private func readDecimalInt() {
         while !isAtEnd() && String(peek()!).isDecimal() {
             _ = next()
         }
         addToken(type: .integer)
     }
 
-    private func readHexIntLiteral() {
+    private func readHexInt() {
         while !isAtEnd() && String(peek()!).isHex() {
             _ = next()
         }
         addToken(type: .integer)
     }
 
-    private func readNumberLiteral() {
+    private func readIntOrFloat() {
         while !isAtEnd() && String(peek()!).isDecimal() {
             _ = next()
         }
@@ -210,6 +215,26 @@ class Scanner {
         }
 
         addToken(type: .float)
+    }
+
+    private func readDotFloat() {
+        while !isAtEnd() && String(peek()!).isDecimal() {
+            _ = next()
+        }
+
+        if current < source.count - 1 {
+            if peek()! == "e" {
+                _ = next()
+                if peek()! == "+" || peek() == "-" {
+                    _ = next()
+                }
+                while !isAtEnd() && String(peek()!).isDecimal() {
+                    _ = next()
+                }
+            }
+        }
+
+        addToken(type: .dotfloat)
     }
 
     private func peek() -> Character? {
