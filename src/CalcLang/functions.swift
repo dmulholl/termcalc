@@ -292,19 +292,16 @@ class Cbrt: Function {
 // Calculate the principal n-th root of the specified value.
 class Root: Function {
     func call(token: Token, args: [Double]) throws -> Double {
-        guard args.count == 2 || args.count == 3 else {
+        guard args.count == 2 else {
             throw CalcLangError.arityError(
                 offset: token.offset,
                 lexeme: token.lexeme,
-                message: "expected 2 or 3 arguments, found \(args.count)"
+                message: "expected 2 arguments, found \(args.count)"
             )
         }
         let n = args[0]
         let x = args[1]
-        var precision = Double.ulpOfOne * 10
-        if args.count == 3 {
-            precision = args[2]
-        }
+        let precision = Double.ulpOfOne
 
         guard n > 0 && n.truncatingRemainder(dividingBy: 1) == 0 else {
             throw CalcLangError.mathError(

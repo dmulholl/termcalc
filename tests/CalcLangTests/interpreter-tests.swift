@@ -3,6 +3,10 @@ import XCTest
 
 final class InterpreterTests: XCTestCase {
 
+    // ---------------------------------------------------------------------
+    // Literals.
+    // ---------------------------------------------------------------------
+
     func testIntegerLiteral() {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: "99")
@@ -14,7 +18,7 @@ final class InterpreterTests: XCTestCase {
         let output = try! interpreter.interpret(source: "99.99")
         XCTAssertEqual(output, "99.99")
     }
-    
+
     func testDotFloatLiteral() {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: ".99")
@@ -38,6 +42,46 @@ final class InterpreterTests: XCTestCase {
         let output = try! interpreter.interpret(source: "100.00")
         XCTAssertEqual(output, "100")
     }
+
+    func testBinaryLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0b0101")
+        XCTAssertEqual(output, "5")
+    }
+
+    func testOctalLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0o0101")
+        XCTAssertEqual(output, "65")
+    }
+
+    func testDecimalLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0d0101")
+        XCTAssertEqual(output, "101")
+    }
+
+    func testHexLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0x0101")
+        XCTAssertEqual(output, "257")
+    }
+
+    func testExpLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "123e5")
+        XCTAssertEqual(output, "12300000")
+    }
+
+    func testNegativbeExpLiteral() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "123e-5")
+        XCTAssertEqual(output, "0.00123")
+    }
+
+    // ---------------------------------------------------------------------
+    // Simple expressions.
+    // ---------------------------------------------------------------------
 
     func testBinaryExpr() {
         let interpreter = Interpreter()
@@ -85,36 +129,6 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: "0.1 + 0.1 + 0.1 - 0.3")
         XCTAssertEqual(output, "0")
-    }
-
-    func testPiConstant() {
-        let interpreter = Interpreter()
-        let output = try! interpreter.interpret(source: "pi")
-        XCTAssertEqual(output, "3.141592654")
-    }
-
-    func testEulerConstant() {
-        let interpreter = Interpreter()
-        let output = try! interpreter.interpret(source: "e")
-        XCTAssertEqual(output, "2.718281828")
-    }
-
-    func testAssignment() {
-        let interpreter = Interpreter()
-        var output = try! interpreter.interpret(source: "foo = 101")
-        XCTAssertEqual(output, "")
-        output = try! interpreter.interpret(source: "foo")
-        XCTAssertEqual(output, "101")
-    }
-
-    func testUndefinedVariableError() {
-        let interpreter = Interpreter()
-        XCTAssertThrowsError(
-            try interpreter.interpret(source: "foo")) { error in
-                guard case CalcLangError.undefinedVariable = error else {
-                    return XCTFail()
-                }
-            }
     }
 
     func testDivByZeroError() {
@@ -193,6 +207,46 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(output, "27")
     }
 
+    func testFactorialOperator() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "5!")
+        XCTAssertEqual(output, "120")
+    }
+
+    // ---------------------------------------------------------------------
+    // Variables, constants, and assignment.
+    // ---------------------------------------------------------------------
+
+    func testPiConstant() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "pi")
+        XCTAssertEqual(output, "3.141592654")
+    }
+
+    func testEulerConstant() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "e")
+        XCTAssertEqual(output, "2.718281828")
+    }
+
+    func testUndefinedVariableError() {
+        let interpreter = Interpreter()
+        XCTAssertThrowsError(
+            try interpreter.interpret(source: "foo")) { error in
+                guard case CalcLangError.undefinedVariable = error else {
+                    return XCTFail()
+                }
+            }
+    }
+
+    func testAssignment() {
+        let interpreter = Interpreter()
+        var output = try! interpreter.interpret(source: "foo = 101 + 1")
+        XCTAssertEqual(output, "102")
+        output = try! interpreter.interpret(source: "foo")
+        XCTAssertEqual(output, "102")
+    }
+
     func testPlusEqualsAssignment() {
         let interpreter = Interpreter()
         _ = try! interpreter.interpret(source: "foo = 1")
@@ -240,6 +294,10 @@ final class InterpreterTests: XCTestCase {
         let output = try! interpreter.interpret(source: "foo")
         XCTAssertEqual(output, "8")
     }
+
+    // ---------------------------------------------------------------------
+    // Trig functions.
+    // ---------------------------------------------------------------------
 
     func testDegFunc() {
         let interpreter = Interpreter()
@@ -441,5 +499,215 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(output, "0")
     }
 
+    func testAcos_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "acos(0)")
+        XCTAssertEqual(output, "1.570796327")
+    }
 
+    func testAcos_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "acos(1)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAcos_Minus1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "acos(-1)")
+        XCTAssertEqual(output, "3.141592654")
+    }
+
+    func testAsin_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "asin(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAsin_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "asin(1)")
+        XCTAssertEqual(output, "1.570796327")
+    }
+
+    func testAsin_Minus1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "asin(-1)")
+        XCTAssertEqual(output, "-1.570796327")
+    }
+
+    func testAtan_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "atan(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAtan_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "atan(1)")
+        XCTAssertEqual(output, "0.785398163")
+    }
+
+    func testAcosd_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "acosd(0)")
+        XCTAssertEqual(output, "90")
+    }
+
+    func testAcosd_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "acosd(1)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAsind_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "asind(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAsind_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "asind(1)")
+        XCTAssertEqual(output, "90")
+    }
+
+    func testAtand_0() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "atand(0)")
+        XCTAssertEqual(output, "0")
+    }
+
+    func testAtand_1() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "atand(1)")
+        XCTAssertEqual(output, "45")
+    }
+
+    // ---------------------------------------------------------------------
+    // Roots.
+    // ---------------------------------------------------------------------
+
+    func testRootTwoOfFour() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "root(2,4)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testRootTwoOfTwo() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "root(2,2)")
+        XCTAssertEqual(output, "1.414213562")
+    }
+
+    func testRootThreeOfEight() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "root(3,8)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testRootThreeOfNine() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "root(3,9)")
+        XCTAssertEqual(output, "2.080083823")
+    }
+
+    func testSqrtOfFour() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sqrt(4)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testSqrtOfTwo() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "sqrt(2)")
+        XCTAssertEqual(output, "1.414213562")
+    }
+
+    func testCbrtOfEight() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cbrt(8)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testCbrtOfNine() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "cbrt(9)")
+        XCTAssertEqual(output, "2.080083823")
+    }
+
+    // ---------------------------------------------------------------------
+    // Logs.
+    // ---------------------------------------------------------------------
+
+    func testLogTwoOfEight() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(2,8)")
+        XCTAssertEqual(output, "3")
+    }
+
+    func testLogTwoOfNine() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(2,9)")
+        XCTAssertEqual(output, "3.169925001")
+    }
+
+    func testLogTenOfOneHundred() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(10,100)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testLogTenOfOneHundredAndOne() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(10,101)")
+        XCTAssertEqual(output, "2.004321374")
+    }
+
+    func testLogEOfE() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(e,e)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testLogEOfTen() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log(e,10)")
+        XCTAssertEqual(output, "2.302585093")
+    }
+
+    func testLog2OfEight() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log2(8)")
+        XCTAssertEqual(output, "3")
+    }
+
+    func testLog2OfNine() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log2(9)")
+        XCTAssertEqual(output, "3.169925001")
+    }
+
+    func testLog10OfOneHundred() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log10(100)")
+        XCTAssertEqual(output, "2")
+    }
+
+    func testLog10OfOneHundredAndOne() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "log10(101)")
+        XCTAssertEqual(output, "2.004321374")
+    }
+
+    func testLnOfE() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "ln(e)")
+        XCTAssertEqual(output, "1")
+    }
+
+    func testLnOfTen() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "ln(10)")
+        XCTAssertEqual(output, "2.302585093")
+    }
 }
