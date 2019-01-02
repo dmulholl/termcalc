@@ -8,7 +8,7 @@ import CalcLang
 import TermUtils
 
 
-let version = "0.3.2"
+let version = "1.0.0"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
