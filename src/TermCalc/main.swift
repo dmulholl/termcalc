@@ -8,7 +8,7 @@ import CalcLang
 import TermUtils
 
 
-let version = "1.0.0"
+let version = "1.1.0"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
@@ -31,15 +31,15 @@ Flags:
   -v, --version             Print the application's version number and exit.
 
 Functions:
-  acos(x)                   Inverse cosine of x; result in radians.
-  acosd(x)                  Inverse cosine of x; result in degrees.
-  asin(x)                   Inverse sine of x; result in radians.
-  asind(x)                  Inverse sine of x; result in degrees.
-  atan(x)                   Inverse tangent of x; result in radians.
-  atan(x,y)                 Inverse tangent of y/x; result in radians, sign
+  arccos(x)                 Inverse cosine of x; result in radians.
+  arccosd(x)                Inverse cosine of x; result in degrees.
+  arcsin(x)                 Inverse sine of x; result in radians.
+  arcsind(x)                Inverse sine of x; result in degrees.
+  arctan(x)                 Inverse tangent of x; result in radians.
+  arctan(x,y)               Inverse tangent of y/x; result in radians, sign
                             determined by the quadrant of (x,y).
-  atand(x)                  Inverse tangent of x; result in degrees.
-  atand(x,y)                Inverse tangent of y/x; result in degrees, sign
+  arctand(x)                Inverse tangent of x; result in degrees.
+  arctand(x,y)              Inverse tangent of y/x; result in degrees, sign
                             determined by the quadrant of (x,y).
   cbrt(x)                   Cube root of x.
   cos(x)                    Cosine of x; x in radians.

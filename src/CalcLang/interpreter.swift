@@ -9,36 +9,68 @@ import Foundation
 public class Interpreter {
 
     var precision = 9
-    var variables = [String:Double]()
     var count = 0
 
-    let constants = [
+    var variables = [
         "pi": Double.pi,
         "e": M_E,
     ]
 
     let functions: [String:Function] = [
-        "acos": Acos(),
-        "acosd": Acosd(),
-        "asin": Asin(),
-        "asind": Asind(),
-        "atan": Atan(),
-        "atand": Atand(),
-        "cbrt": Cbrt(),
-        "cos": Cos(),
-        "cosd": Cosd(),
+
+        // Angle conversions.
         "deg": Deg(),
+        "rad": Rad(),
+
+        // Trig.
+        "cos": Cos(),
+        "sin": Sin(),
+        "tan": Tan(),
+
+        "cosd": Cosd(),
+        "sind": Sind(),
+        "tand": Tand(),
+
+        "cosr": Cos(),
+        "sinr": Sin(),
+        "tanr": Tan(),
+
+        // Inverse Trig Shortform.
+        "acos": Acos(),
+        "asin": Asin(),
+        "atan": Atan(),
+
+        "acosd": Acosd(),
+        "asind": Asind(),
+        "atand": Atand(),
+
+        "acosr": Acos(),
+        "asinr": Asin(),
+        "atanr": Atan(),
+
+        // Inverse Trig Longform.
+        "arccos": Acos(),
+        "arcsin": Asin(),
+        "arctan": Atan(),
+
+        "arccosd": Acosd(),
+        "arcsind": Asind(),
+        "arctand": Atand(),
+
+        "arccosr": Acos(),
+        "arcsinr": Asin(),
+        "arctanr": Atan(),
+
+        // Roots.
+        "cbrt": Cbrt(),
+        "root": Root(),
+        "sqrt": Sqrt(),
+
+        // Logs.
         "ln": Ln(),
         "log": Log(),
         "log2": Log2(),
         "log10": Log10(),
-        "rad": Rad(),
-        "root": Root(),
-        "sin": Sin(),
-        "sind": Sind(),
-        "sqrt": Sqrt(),
-        "tan": Tan(),
-        "tand": Tand(),
     ]
 
     public init(precision: Int = 9) {
@@ -148,7 +180,7 @@ public class Interpreter {
             throw CalcLangError.mathError(
                 offset: expr.optoken.offset,
                 lexeme: expr.optoken.lexeme,
-                message: "result is not a representable number (NaN)"
+                message: "result is not a number (NaN)"
             )
         }
         return result
@@ -156,9 +188,6 @@ public class Interpreter {
 
     private func evalVariable(_ expr: VariableExpr) throws -> Double {
         if let value = variables[expr.name.lexeme] {
-            return value
-        }
-        else if let value = constants[expr.name.lexeme] {
             return value
         }
         throw CalcLangError.undefinedVariable(
@@ -242,7 +271,7 @@ public class Interpreter {
             throw CalcLangError.mathError(
                 offset: expr.callee.name.offset,
                 lexeme: expr.callee.name.lexeme,
-                message: "result is not a representable number (NaN)"
+                message: "result is not a number (NaN)"
             )
         }
         return result
