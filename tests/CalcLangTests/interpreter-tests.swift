@@ -67,16 +67,22 @@ final class InterpreterTests: XCTestCase {
         XCTAssertEqual(output, "257")
     }
 
-    func testExpLiteral() {
+    func testExpLiteralNoDecimal() {
         let interpreter = Interpreter()
-        let output = try! interpreter.interpret(source: "123e5")
-        XCTAssertEqual(output, "12300000")
+        let output = try! interpreter.interpret(source: "123e4")
+        XCTAssertEqual(output, "1230000")
     }
 
-    func testNegativbeExpLiteral() {
+    func testExpLiteralWithDecimal() {
         let interpreter = Interpreter()
-        let output = try! interpreter.interpret(source: "123e-5")
-        XCTAssertEqual(output, "0.00123")
+        let output = try! interpreter.interpret(source: "1.23e4")
+        XCTAssertEqual(output, "12300")
+    }
+
+    func testExpLiteralNegativeIndex() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "1.23e-4")
+        XCTAssertEqual(output, "0.000123")
     }
 
     // ---------------------------------------------------------------------
