@@ -1,5 +1,4 @@
 // swift-tools-version:4.0
-
 import PackageDescription
 
 let package = Package(
@@ -11,8 +10,8 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/dmulholland/janus-swift.git",
-            from: "1.0.0"
+            url: "https://github.com/dmulholl/argparser.git",
+            from: "2.0.0"
         ),
     ],
     targets: [
@@ -21,7 +20,7 @@ let package = Package(
             dependencies: []),
         .target(
             name: "TermCalc",
-            dependencies: ["CalcLang", "Janus", "TermUtils"]),
+            dependencies: ["CalcLang", "ArgParser", "TermUtils"]),
         .target(
             name: "TermUtils",
             dependencies: []),

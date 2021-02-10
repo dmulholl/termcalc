@@ -7,8 +7,8 @@ import Foundation
 
 public class Terminal {
 
-    public static func writeErr(_ string: String) {
-        if let data = string.data(using: .utf8) {
+    public static func writeError(_ message: String) {
+        if let data = message.data(using: .utf8) {
             FileHandle.standardError.write(data)
         }
     }

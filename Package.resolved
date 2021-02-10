@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "Janus",
-        "repositoryURL": "https://github.com/dmulholland/janus-swift.git",
+        "package": "argparser",
+        "repositoryURL": "https://github.com/dmulholl/argparser.git",
         "state": {
           "branch": null,
-          "revision": "9e439f6bec0ef5dfcb05657bd1cb421d5249d8d9",
-          "version": "1.0.0"
+          "revision": "dd06394bfeb2bf0257811c5ee5cb6d9eecf5da3a",
+          "version": "2.0.0"
         }
       }
     ]

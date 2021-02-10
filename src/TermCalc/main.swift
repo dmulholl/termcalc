@@ -1,19 +1,15 @@
-// -----------------------------------------------------------------------------
-// TermCalc - a command line calculator.
-// -----------------------------------------------------------------------------
-
 import Foundation
-import Janus
 import CalcLang
 import TermUtils
+import ArgParser
 
 
-let version = "1.1.1"
+let version = "1.2.0.dev"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
 let helptext = """
-Usage: \(binary) [OPTIONS] [FLAGS]
+Usage: \(binary)
 
   TermCalc is a command line calculator. All operations are performed using
   IEEE 754 64-bit floats.
@@ -28,7 +24,7 @@ Options:
 
 Flags:
   -h, --help                Print this help text and exit.
-  -v, --version             Print the application's version number and exit.
+  -v, --version             Print the version number and exit.
 
 Functions:
   arccos(x)                 Inverse cosine of x; result in radians.
@@ -59,16 +55,25 @@ Functions:
 """
 
 
-let argparser = ArgParser(helptext: helptext, version: version)
-argparser.newInt("precision p", fallback: 9)
-argparser.newString("eval e")
+let argparser = ArgParser()
+    .helptext(helptext)
+    .version(version)
+    .option("eval")
+    .option("precision p")
+
 argparser.parse()
 
-
-if argparser.found("eval") {
-    eval(argparser: argparser, source: argparser.getString("eval"))
-} else if Terminal.isTermStdin() && Terminal.isTermStdout(){
-    repl(argparser: argparser)
-} else if let input = readLine() {
-    eval(argparser: argparser, source: input)
+guard let precision = Int(argparser.value("precision") ?? "9") else {
+    Terminal.writeError("Error: invalid value for the '--precision' option.\n")
+    exit(1);
 }
+
+repl(precision: precision)
+
+// if argparser.found("eval") {
+//     // eval(argparser: argparser, source: argparser.getString("eval"))
+// } else if Terminal.isTermStdin() && Terminal.isTermStdout() {
+//     repl(precision: precision)
+// } else if let input = readLine() {
+//     // eval(argparser: argparser, source: input)
+// }

@@ -1,14 +1,9 @@
-// -----------------------------------------------------------------------------
-// Interactive REPL mode.
-// -----------------------------------------------------------------------------
-
 import Foundation
 import TermUtils
-import Janus
 import CalcLang
 
 
-func repl(argparser: ArgParser) {
+func repl(precision: Int) {
     let term = Terminal()
     let cols = term.width() ?? 80
 
@@ -20,7 +15,7 @@ func repl(argparser: ArgParser) {
     term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
     term.writeln("─", color: .brightBlack, times: cols)
 
-    let interpreter = Interpreter(precision: argparser.getInt("precision"))
+    let interpreter = Interpreter(precision: precision)
     var count = 0
 
     while true {
