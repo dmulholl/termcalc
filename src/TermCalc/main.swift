@@ -8,7 +8,7 @@ import CalcLang
 import TermUtils
 
 
-let version = "1.1.0"
+let version = "1.1.1"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
@@ -16,7 +16,7 @@ let helptext = """
 Usage: \(binary) [OPTIONS] [FLAGS]
 
   TermCalc is a command line calculator. All operations are performed using
-  IEEE 754-2008 64-bit floats.
+  IEEE 754 64-bit floats.
 
   If stdin is connected to a terminal, TermCalc will run in interactive mode.
   If stdin is connected to a pipe or file, TermCalc will read in a single

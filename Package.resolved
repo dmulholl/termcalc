@@ -9,24 +9,6 @@
           "revision": "9e439f6bec0ef5dfcb05657bd1cb421d5249d8d9",
           "version": "1.0.0"
         }
-      },
-      {
-        "package": "LineNoise",
-        "repositoryURL": "https://github.com/dmulholland/linenoise-swift.git",
-        "state": {
-          "branch": null,
-          "revision": "8e206331a05085b1a99e6906e36cd83af1e6741a",
-          "version": "0.0.5"
-        }
-      },
-      {
-        "package": "Nimble",
-        "repositoryURL": "https://github.com/Quick/Nimble.git",
-        "state": {
-          "branch": null,
-          "revision": "9c1379fdcd58c4f2278aea5e029394ba9a2b8f07",
-          "version": "7.1.3"
-        }
       }
     ]
   },

@@ -13,10 +13,8 @@ func repl(argparser: ArgParser) {
     let cols = term.width() ?? 80
 
     term.writeln("─", color: .brightBlack, times: cols)
-    //term.write("  ││  ", color: .brightBlack)
     term.write("  ··  ", color: .brightBlack)
     term.write("Terminal Calculator")
-    //term.write("  ││", color: .brightBlack)
     term.write("  ··", color: .brightBlack)
     term.write(" ", times: cols - 58)
     term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
