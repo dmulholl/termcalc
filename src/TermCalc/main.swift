@@ -4,23 +4,21 @@ import TermUtils
 import ArgParser
 
 
-let version = "1.2.0.dev"
+let version = "2.0.0.dev"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
 let helptext = """
 Usage: \(binary)
 
-  TermCalc is a command line calculator. All operations are performed using
-  IEEE 754 64-bit floats.
-
-  If stdin is connected to a terminal, TermCalc will run in interactive mode.
-  If stdin is connected to a pipe or file, TermCalc will read in a single
-  line of input, evaluate it, and print the output to stdout.
+  TermCalc is an interactive command line calculator. All operations are
+  performed using IEEE 754 64-bit floats.
 
 Options:
-  -e, --eval <str>          Evaluate an expression and print the result.
-  -p, --precision <int>     Set decimal precision of output (default: 9).
+  -d, --decimal <str>       Decimal separator (default '.').
+  -k, --kilo <str>          Group separator for thousands (default: ',').
+  -m, --milli <str>         Group separator for thousandths (default: ' ').
+  -p, --precision <int>     Decimal precision of output (default: 9).
 
 Flags:
   -h, --help                Print this help text and exit.
@@ -58,22 +56,90 @@ Functions:
 let argparser = ArgParser()
     .helptext(helptext)
     .version(version)
-    .option("eval")
+    .option("decimal d")
+    .option("kilo k")
+    .option("milli m")
     .option("precision p")
 
 argparser.parse()
 
 guard let precision = Int(argparser.value("precision") ?? "9") else {
+    Terminal.writeError("Error: unparsable value for the '--precision' option.\n")
+    exit(1);
+}
+guard precision >= 0 else {
     Terminal.writeError("Error: invalid value for the '--precision' option.\n")
     exit(1);
 }
 
-repl(precision: precision)
+let interpreter = Interpreter()
+interpreter.kiloSeparator = argparser.value("kilo") ?? ","
+interpreter.milliSeparator = argparser.value("milli") ?? " "
+interpreter.decimalSeparator = argparser.value("decimal") ?? "."
+interpreter.precision = precision
 
-// if argparser.found("eval") {
-//     // eval(argparser: argparser, source: argparser.getString("eval"))
-// } else if Terminal.isTermStdin() && Terminal.isTermStdout() {
-//     repl(precision: precision)
-// } else if let input = readLine() {
-//     // eval(argparser: argparser, source: input)
-// }
+var count = 0
+let term = Terminal()
+let cols = term.width() ?? 80
+
+term.writeln("─", color: .brightBlack, times: cols)
+term.write("  ··  ", color: .brightBlack)
+term.write("Terminal Calculator")
+term.write("  ··", color: .brightBlack)
+term.write(" ", times: cols - 58)
+term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
+term.writeln("─", color: .brightBlack, times: cols)
+
+while true {
+    do {
+        let input = try term.getLine(prompt: "  >>  ", color: .brightBlack)
+        print()
+        if input.trimmingCharacters(in: .whitespaces).isEmpty {
+            continue
+        }
+        if input == "q" || input == "quit" {
+            break
+        }
+        term.addHistoryItem(input)
+        let output = try interpreter.interpret(source: input)
+        if !output.isEmpty{
+            count += 1
+            let result = "\(output)"
+            let resultID = "$\(count)"
+            term.write("  =>  ", color: .brightBlack)
+            term.write(result)
+            let spaces = cols - 6 - result.count - resultID.count - 2
+            term.write(" ", times: spaces <= 0 ? 1 : spaces)
+            term.writeln(resultID, color: .brightBlack)
+            term.writeln("")
+        }
+    } catch CalcLangError.syntaxError(let offset, let lexeme, let message) {
+        term.write("  !>  ", color: .brightBlack)
+        term.write(" ", times: offset)
+        if lexeme.isEmpty {
+            term.writeln("^", color: .red)
+        } else {
+            term.writeln("^", color: .red, times: lexeme.count)
+        }
+        term.write("  !>  ", color: .brightBlack)
+        term.writeln("Error: \(message)\n")
+    } catch CalcLangError.runtimeError(let offset, let lexeme, let message) {
+        term.write("  !>  ", color: .brightBlack)
+        term.write(" ", times: offset)
+        term.writeln("^", color: .red, times: lexeme.count)
+        term.write("  !>  ", color: .brightBlack)
+        term.writeln("Error: \(message)\n")
+    } catch TermUtilsError.eof {
+        print()
+        break
+    } catch TermUtilsError.ctrl_c {
+        print()
+        break
+    } catch {
+        term.write("  !>  ", color: .brightBlack)
+        print("Error: \(error)\n")
+    }
+}
+
+term.writeln("─", color: .brightBlack, times: cols)
+

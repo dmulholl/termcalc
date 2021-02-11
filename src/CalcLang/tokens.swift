@@ -1,6 +1,11 @@
-// -----------------------------------------------------------------------------
-// Tokens are produced by the scanner and consumed by the parser.
-// -----------------------------------------------------------------------------
+enum TokenType {
+    case left_paren, right_paren, comma, bang
+    case plus, minus, star, slash, mod, caret, equal
+    case plus_equal, minus_equal, star_equal, slash_equal, mod_equal, caret_equal
+    case identifier, integer, float, dot_float
+    case eof
+}
+
 
 struct Token {
     let type: TokenType
@@ -16,15 +21,6 @@ extension Token: Equatable {
             lhs.lexeme == rhs.lexeme &&
             lhs.offset == rhs.offset
     }
-}
-
-
-enum TokenType {
-    case leftparen, rightparen, comma, bang
-    case plus, minus, star, slash, modulo, caret, equal
-    case plusequal, minusequal, starequal, slashequal, moduloequal, caretequal
-    case identifier, integer, float, dotfloat
-    case eof
 }
 
 

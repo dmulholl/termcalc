@@ -1,7 +1,3 @@
-// -----------------------------------------------------------------------------
-// Builtin functions.
-// -----------------------------------------------------------------------------
-
 import Foundation
 
 
@@ -19,11 +15,8 @@ protocol Function {
 class Deg: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return args[0] * 180 / Double.pi
     }
@@ -34,11 +27,8 @@ class Deg: Function {
 class Rad: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return args[0] * Double.pi / 180
     }
@@ -49,11 +39,8 @@ class Rad: Function {
 class Sin: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return sin(args[0])
     }
@@ -64,11 +51,8 @@ class Sin: Function {
 class Cos: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return cos(args[0])
     }
@@ -79,11 +63,8 @@ class Cos: Function {
 class Tan: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return tan(args[0])
     }
@@ -94,11 +75,8 @@ class Tan: Function {
 class Sind: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let radians = args[0] * Double.pi / 180
         return sin(radians)
@@ -110,11 +88,8 @@ class Sind: Function {
 class Cosd: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let radians = args[0] * Double.pi / 180
         return cos(radians)
@@ -126,11 +101,8 @@ class Cosd: Function {
 class Tand: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let radians = args[0] * Double.pi / 180
         return tan(radians)
@@ -147,11 +119,8 @@ class Tand: Function {
 class Acos: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return acos(args[0])
     }
@@ -162,11 +131,8 @@ class Acos: Function {
 class Asin: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return asin(args[0])
     }
@@ -183,10 +149,10 @@ class Atan: Function {
             let y = args[1]
             return atan2(y, x)
         } else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 or 2 arguments, found \(args.count)"
+            throw CalcLangError.runtimeError(
+                token.offset,
+                token.lexeme,
+                "Expected 1 or 2 arguments, found \(args.count)."
             )
         }
     }
@@ -197,11 +163,8 @@ class Atan: Function {
 class Acosd: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let radians = acos(args[0])
         return radians * 180 / Double.pi
@@ -213,11 +176,8 @@ class Acosd: Function {
 class Asind: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let radians = asin(args[0])
         return radians * 180 / Double.pi
@@ -237,10 +197,10 @@ class Atand: Function {
             let radians = atan2(y, x)
             return radians * 180 / Double.pi
         } else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 or 2 arguments, found \(args.count)"
+            throw CalcLangError.runtimeError(
+                token.offset,
+                token.lexeme,
+                "Expected 1 or 2 arguments, found \(args.count)."
             )
         }
     }
@@ -256,18 +216,12 @@ class Atand: Function {
 class Sqrt: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         guard args[0] >= 0 else {
-            throw CalcLangError.mathError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "sqrt() requires a positive argument"
-            )
+            let msg = "sqrt() requires a positive argument."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return sqrt(args[0])
     }
@@ -278,11 +232,8 @@ class Sqrt: Function {
 class Cbrt: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return cbrt(args[0])
     }
@@ -293,29 +244,20 @@ class Cbrt: Function {
 class Root: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 2 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 2 arguments, found \(args.count)"
-            )
+            let msg = "Expected 2 arguments, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         let n = args[0]
         let x = args[1]
         let precision = Double.ulpOfOne
 
         guard n > 0 && n.truncatingRemainder(dividingBy: 1) == 0 else {
-            throw CalcLangError.mathError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "only positive integer roots are supported"
-            )
+            let msg = "root(n, x) requires positive integer n."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         guard x > 0 else {
-            throw CalcLangError.mathError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "only roots of positive numbers are supported"
-            )
+            let msg = "root(n, x) requires positive x."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
 
         // Algorithm: https://en.wikipedia.org/wiki/Nth_root_algorithm.
@@ -340,11 +282,8 @@ class Root: Function {
 class Ln: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return log(args[0])
     }
@@ -355,11 +294,8 @@ class Ln: Function {
 class Log2: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return log2(args[0])
     }
@@ -370,11 +306,8 @@ class Log2: Function {
 class Log10: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 1 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 1 argument, found \(args.count)"
-            )
+            let msg = "Expected 1 argument, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         return log10(args[0])
     }
@@ -385,29 +318,20 @@ class Log10: Function {
 class Log: Function {
     func call(token: Token, args: [Double]) throws -> Double {
         guard args.count == 2 else {
-            throw CalcLangError.arityError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "expected 2 arguments, found \(args.count)"
-            )
+            let msg = "Expected 2 arguments, found \(args.count)."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
 
         let base = args[0]
         let operand = args[1]
 
         guard base > 0 else {
-            throw CalcLangError.mathError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "log() requires a positive base"
-            )
+            let msg = "log() requires a positive base."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
         guard operand > 0 else {
-            throw CalcLangError.mathError(
-                offset: token.offset,
-                lexeme: token.lexeme,
-                message: "log() requires a positive operand"
-            )
+            let msg = "log() requires a positive operand."
+            throw CalcLangError.runtimeError(token.offset, token.lexeme, msg)
         }
 
         return log(operand) / log(base)

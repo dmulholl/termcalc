@@ -26,8 +26,8 @@ final class ScannerTests: XCTestCase {
         let scanner = Scanner("()")
         let tokens = try! scanner.scan()
         let expect = [
-            Token(type: .leftparen, lexeme: "(", offset: 0),
-            Token(type: .rightparen, lexeme: ")", offset: 1),
+            Token(type: .left_paren, lexeme: "(", offset: 0),
+            Token(type: .right_paren, lexeme: ")", offset: 1),
             Token(type: .eof, lexeme: "", offset: 2),
         ]
         XCTAssertEqual(tokens, expect)
@@ -48,7 +48,7 @@ final class ScannerTests: XCTestCase {
         let scanner = Scanner("+=")
         let tokens = try! scanner.scan()
         let expect = [
-            Token(type: .plusequal, lexeme: "+=", offset: 0),
+            Token(type: .plus_equal, lexeme: "+=", offset: 0),
             Token(type: .eof, lexeme: "", offset: 2),
         ]
         XCTAssertEqual(tokens, expect)
@@ -97,7 +97,7 @@ final class ScannerTests: XCTestCase {
         let scanner = Scanner(".456")
         let tokens = try! scanner.scan()
         let expect = [
-            Token(type: .dotfloat, lexeme: ".456", offset: 0),
+            Token(type: .dot_float, lexeme: ".456", offset: 0),
             Token(type: .eof, lexeme: "", offset: 4),
         ]
         XCTAssertEqual(tokens, expect)
@@ -144,7 +144,7 @@ final class ScannerTests: XCTestCase {
     func testInvalidCharacterError() {
         let scanner = Scanner("&")
         XCTAssertThrowsError(try scanner.scan()) { error in
-            guard case CalcLangError.invalidCharacter = error else {
+            guard case CalcLangError.syntaxError = error else {
                 return XCTFail()
             }
         }

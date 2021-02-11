@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------------
-// The scanner accepts a source string and converts it into a sequence of
-// tokens.
-// -----------------------------------------------------------------------------
-
 class Scanner {
     private let source: [Character]
     private var start = 0
@@ -23,13 +18,13 @@ class Scanner {
     }
 
     private func readNextToken() throws {
-        let char = next()
+        let char = nextChar()
 
         // Single-character tokens.
         if char == "(" {
-            addToken(type: .leftparen)
+            addToken(type: .left_paren)
         } else if char == ")" {
-            addToken(type: .rightparen)
+            addToken(type: .right_paren)
         } else if char == "," {
             addToken(type: .comma)
         } else if char == "=" {
@@ -40,41 +35,17 @@ class Scanner {
 
         // Single or double-character tokens.
         else if char == "+" {
-            if match("=") {
-                addToken(type: .plusequal)
-            } else {
-                addToken(type: .plus)
-            }
+            match("=") ? addToken(type: .plus_equal) : addToken(type: .plus)
         } else if char == "-" {
-            if match("=") {
-                addToken(type: .minusequal)
-            } else {
-                addToken(type: .minus)
-            }
+            match("=") ? addToken(type: .minus_equal) : addToken(type: .minus)
         } else if char == "*" {
-            if match("=") {
-                addToken(type: .starequal)
-            } else {
-                addToken(type: .star)
-            }
+            match("=") ? addToken(type: .star_equal) : addToken(type: .star)
         } else if char == "/" {
-            if match("=") {
-                addToken(type: .slashequal)
-            } else {
-                addToken(type: .slash)
-            }
+            match("=") ? addToken(type: .slash_equal) : addToken(type: .slash)
         } else if char == "%" {
-            if match("=") {
-                addToken(type: .moduloequal)
-            } else {
-                addToken(type: .modulo)
-            }
+            match("=") ? addToken(type: .mod_equal) : addToken(type: .mod)
         } else if char == "^" {
-            if match("=") {
-                addToken(type: .caretequal)
-            } else {
-                addToken(type: .caret)
-            }
+            match("=") ? addToken(type: .caret_equal) : addToken(type: .caret)
         }
 
         // Whitespace.
@@ -115,15 +86,16 @@ class Scanner {
         // Reference.
         else if char == "$" {
             while !isAtEnd() && String(peek()!).isDecimal() {
-                _ = next()
+                nextChar()
             }
             addToken(type: .identifier)
         }
 
         else {
-            throw CalcLangError.invalidCharacter(
-                offset: current - 1,
-                char: char
+            throw CalcLangError.syntaxError(
+                current - 1,
+                "\(char)",
+                "Invalid character '\(char)' in input."
             )
         }
     }
@@ -132,7 +104,7 @@ class Scanner {
         return current >= source.count
     }
 
-    private func next() -> Character {
+    @discardableResult private func nextChar() -> Character {
         current += 1
         return source[current - 1]
     }
@@ -157,35 +129,35 @@ class Scanner {
 
     private func readBinaryInt() {
         while !isAtEnd() && String(peek()!).isBinary() {
-            _ = next()
+            nextChar()
         }
         addToken(type: .integer)
     }
 
     private func readOctalInt() {
         while !isAtEnd() && String(peek()!).isOctal() {
-            _ = next()
+            nextChar()
         }
         addToken(type: .integer)
     }
 
     private func readDecimalInt() {
         while !isAtEnd() && String(peek()!).isDecimal() {
-            _ = next()
+            nextChar()
         }
         addToken(type: .integer)
     }
 
     private func readHexInt() {
         while !isAtEnd() && String(peek()!).isHex() {
-            _ = next()
+            nextChar()
         }
         addToken(type: .integer)
     }
 
     private func readIntOrFloat() {
         while !isAtEnd() && String(peek()!).isDecimal() {
-            _ = next()
+            nextChar()
         }
 
         if isAtEnd() || (peek()! != "." && peek()! != "e") {
@@ -195,21 +167,21 @@ class Scanner {
 
         if current < source.count - 1 {
             if peek()! == "." && String(peekNext()!).isDecimal() {
-                _ = next()
+                nextChar()
                 while !isAtEnd() && String(peek()!).isDecimal() {
-                    _ = next()
+                    nextChar()
                 }
             }
         }
 
         if current < source.count - 1 {
             if peek()! == "e" {
-                _ = next()
+                nextChar()
                 if peek()! == "+" || peek() == "-" {
-                    _ = next()
+                    nextChar()
                 }
                 while !isAtEnd() && String(peek()!).isDecimal() {
-                    _ = next()
+                    nextChar()
                 }
             }
         }
@@ -219,22 +191,22 @@ class Scanner {
 
     private func readDotFloat() {
         while !isAtEnd() && String(peek()!).isDecimal() {
-            _ = next()
+            nextChar()
         }
 
         if current < source.count - 1 {
             if peek()! == "e" {
-                _ = next()
+                nextChar()
                 if peek()! == "+" || peek() == "-" {
-                    _ = next()
+                    nextChar()
                 }
                 while !isAtEnd() && String(peek()!).isDecimal() {
-                    _ = next()
+                    nextChar()
                 }
             }
         }
 
-        addToken(type: .dotfloat)
+        addToken(type: .dot_float)
     }
 
     private func peek() -> Character? {
@@ -256,7 +228,7 @@ class Scanner {
             if isAtEnd() || !String(peek()!).isValidIdentfier() {
                 break
             }
-            _ = next()
+            nextChar()
         }
         let begin = source.index(source.startIndex, offsetBy: start)
         let end = source.index(source.startIndex, offsetBy: current)

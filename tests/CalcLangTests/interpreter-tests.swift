@@ -141,7 +141,7 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         XCTAssertThrowsError(
             try interpreter.interpret(source: "1 / 0")) { error in
-                guard case CalcLangError.divByZero = error else {
+                guard case CalcLangError.runtimeError = error else {
                     return XCTFail()
                 }
             }
@@ -239,7 +239,7 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         XCTAssertThrowsError(
             try interpreter.interpret(source: "foo")) { error in
-                guard case CalcLangError.undefinedVariable = error else {
+                guard case CalcLangError.runtimeError = error else {
                     return XCTFail()
                 }
             }
@@ -321,7 +321,7 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         XCTAssertThrowsError(
             try interpreter.interpret(source: "deg()")) { error in
-                guard case CalcLangError.arityError = error else {
+                guard case CalcLangError.runtimeError = error else {
                     return XCTFail()
                 }
             }
@@ -331,7 +331,7 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         XCTAssertThrowsError(
             try interpreter.interpret(source: "deg(1, 2)")) { error in
-                guard case CalcLangError.arityError = error else {
+                guard case CalcLangError.runtimeError = error else {
                     return XCTFail()
                 }
             }

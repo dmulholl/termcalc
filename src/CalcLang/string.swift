@@ -1,7 +1,3 @@
-// -----------------------------------------------------------------------------
-// Extension methods on the String type required by the scanner.
-// -----------------------------------------------------------------------------
-
 import Foundation
 
 
@@ -15,6 +11,15 @@ let identifierCharacters = CharacterSet.alphanumerics.union(
 )
 
 
+// This extension enables indexing into strings, e.g. foo[5].
+extension String {
+    subscript(offset: Int) -> String {
+        return String(self[index(startIndex, offsetBy: offset)])
+    }
+}
+
+
+// Extension methods on the String type required by the scanner.
 extension String {
 
     func isAlpha() -> Bool {
