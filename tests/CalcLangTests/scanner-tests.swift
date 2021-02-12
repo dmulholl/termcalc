@@ -1,7 +1,7 @@
 import XCTest
 @testable import CalcLang
 
-final class ScannerTests: XCTestCase {
+class ScannerTests: XCTestCase {
 
     func testEmptyString() {
         let scanner = Scanner("")

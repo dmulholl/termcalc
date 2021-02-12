@@ -1,7 +1,7 @@
 import XCTest
 @testable import CalcLang
 
-final class InterpreterTests: XCTestCase {
+class InterpreterTests: XCTestCase {
 
     // ---------------------------------------------------------------------
     // Literals.
@@ -83,6 +83,52 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: "1.23e-4")
         XCTAssertEqual(output, "0.000123")
+    }
+
+    // ---------------------------------------------------------------------
+    // Literals with underscores.
+    // ---------------------------------------------------------------------
+
+    func testIntegerLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "123_456")
+        XCTAssertEqual(output, "123456")
+    }
+
+    func testFloatLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "123_456.123_456")
+        XCTAssertEqual(output, "123456.123456")
+    }
+
+    func testDotFloatLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: ".123_456")
+        XCTAssertEqual(output, "0.123456")
+    }
+
+    func testBinaryLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0b01_01")
+        XCTAssertEqual(output, "5")
+    }
+
+    func testOctalLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0o01_01")
+        XCTAssertEqual(output, "65")
+    }
+
+    func testDecimalLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0d01_01")
+        XCTAssertEqual(output, "101")
+    }
+
+    func testHexLiteralWithUnderscores() {
+        let interpreter = Interpreter()
+        let output = try! interpreter.interpret(source: "0x01_01")
+        XCTAssertEqual(output, "257")
     }
 
     // ---------------------------------------------------------------------
@@ -715,5 +761,33 @@ final class InterpreterTests: XCTestCase {
         let interpreter = Interpreter()
         let output = try! interpreter.interpret(source: "ln(10)")
         XCTAssertEqual(output, "2.302585093")
+    }
+
+    // ---------------------------------------------------------------------
+    // Formatting.
+    // ---------------------------------------------------------------------
+
+    func testPrecision() {
+        let interpreter = Interpreter()
+        interpreter.precision = 2
+        var output = try! interpreter.interpret(source: "99.12345")
+        XCTAssertEqual(output, "99.12")
+
+        interpreter.precision = 3
+        output = try! interpreter.interpret(source: "99.12345")
+        XCTAssertEqual(output, "99.123")
+
+        interpreter.precision = 4
+        output = try! interpreter.interpret(source: "99.12345")
+        XCTAssertEqual(output, "99.1235")
+    }
+
+    func testSeparators() {
+        let interpreter = Interpreter()
+        interpreter.kiloSeparator = ","
+        interpreter.milliSeparator = " "
+        interpreter.decimalSeparator = ":"
+        let output = try! interpreter.interpret(source: "123456.123456")
+        XCTAssertEqual(output, "123,456:123 456")
     }
 }
