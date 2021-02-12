@@ -2,12 +2,21 @@
   "object": {
     "pins": [
       {
-        "package": "argparser",
+        "package": "ArgParser",
         "repositoryURL": "https://github.com/dmulholl/argparser.git",
         "state": {
           "branch": null,
-          "revision": "dd06394bfeb2bf0257811c5ee5cb6d9eecf5da3a",
-          "version": "2.0.0"
+          "revision": "65a7b54ab87b4b83a6864c49c844fd8a463b1575",
+          "version": "2.0.1"
+        }
+      },
+      {
+        "package": "CalcLang",
+        "repositoryURL": "/Users/dmulholl/dev/src/calclang",
+        "state": {
+          "branch": null,
+          "revision": "7d138a182398a8dd2e3ae5bb577a32af45db94cb",
+          "version": "1.0.0"
         }
       },
       {
