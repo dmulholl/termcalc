@@ -1,7 +1,3 @@
-// -----------------------------------------------------------------------------
-// TermUtils: a terminal utility library for building command line programs.
-// -----------------------------------------------------------------------------
-
 import Foundation
 
 
@@ -26,7 +22,6 @@ public class Terminal {
     }
 
     public enum Color: Int {
-
         // Reset all attributes.
         case reset = 0
 
@@ -92,12 +87,6 @@ public class Terminal {
 
     public init() {}
 
-    // public init?() {
-    //     if isatty(fileno(stdout)) == 0 || isatty(fileno(stdin)) == 0 {
-    //         return nil
-    //     }
-    // }
-
     public func setColor(_ colors: Color...) {
         if colors.count > 0 {
             let codes = colors.map({String($0.rawValue)}).joined(separator: ";")
@@ -115,12 +104,14 @@ public class Terminal {
     }
 
     public func write(_ string: String, color: Color? = nil, times: Int = 1) {
-        var output = string
         if let color = color {
-            output = "\(color.string)\(string)\(Color.standard.string)"
+            print(color.string, terminator: "")
         }
         for _ in 0 ..< (times < 0 ? 0 : times) {
-            print(output, terminator: "")
+            print(string, terminator: "")
+        }
+        if color != nil {
+            print(Color.standard.string, terminator: "")
         }
     }
 
@@ -139,12 +130,10 @@ public class Terminal {
                 return width
             }
         }
-
         var ws = winsize()
         if ioctl(1, UInt(TIOCGWINSZ), &ws) == 0 {
             return Int(ws.ws_col)
         }
-
         return nil
     }
 

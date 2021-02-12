@@ -1,6 +1,4 @@
-
 class History {
-
     private var items = [String]()
     private var index = 0
     private var stash: String? = nil
@@ -19,11 +17,9 @@ class History {
                 return
             }
         }
-
         if max != nil && items.count >= max! {
             _ = items.removeFirst()
         }
-
         items.append(item)
         index = items.count
         stash = nil

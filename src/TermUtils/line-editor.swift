@@ -1,9 +1,7 @@
-
 import Foundation
 
 
 class LineEditor {
-
     var originalTermios = termios()
     var lineBuffer = ""
     var cursorOffset = 0
