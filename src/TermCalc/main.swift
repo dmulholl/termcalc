@@ -101,7 +101,7 @@ while true {
             break
         }
         term.addHistoryItem(input)
-        let output = try interpreter.interpret(source: input)
+        let output = try interpreter.eval(source: input)
         if !output.isEmpty{
             count += 1
             let result = "\(output)"

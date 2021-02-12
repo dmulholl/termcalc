@@ -65,7 +65,7 @@ public class Interpreter {
 
     public init() {}
 
-    public func interpret(source: String) throws -> String {
+    public func eval(source: String) throws -> String {
         let scanner = Scanner(source)
         let tokens = try scanner.scan()
         let parser = Parser(tokens)

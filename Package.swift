@@ -25,9 +25,6 @@ let package = Package(
         .target(
             name: "TermCalc",
             dependencies: ["CalcLang", "ArgParser", "TermUtils"]),
-        // .target(
-        //     name: "TermUtils",
-        //     dependencies: []),
         .testTarget(
             name: "CalcLangTests",
             dependencies: ["CalcLang"]),
