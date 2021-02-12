@@ -15,9 +15,9 @@ class Parser {
         return expr
     }
 
-    // ---------------------------------------------------------------------
+    // ---------------------------------
     // Expression parsers.
-    // ---------------------------------------------------------------------
+    // ---------------------------------
 
     private func expression() throws -> Expr {
         return try assignment()
@@ -118,7 +118,7 @@ class Parser {
     private func primary() throws -> Expr {
         if match(.float) {
             let token = nextToken()
-            if let value = Double(token.lexeme) {
+            if let value = Double(token.lexeme.replacingOccurrences(of: "_", with: "")) {
                 return LiteralExpr(value)
             }
             let msg = "Cannot parse '\(token.lexeme)' as a number."
@@ -126,7 +126,7 @@ class Parser {
         }
         else if match(.dot_float) {
             let token = nextToken()
-            if let value = Double("0" + token.lexeme) {
+            if let value = Double("0" + token.lexeme.replacingOccurrences(of: "_", with: "")) {
                 return LiteralExpr(value)
             }
             let msg = "Cannot parse '\(token.lexeme)' as a number."
@@ -134,27 +134,27 @@ class Parser {
         } else if match(.integer) {
             let token = nextToken()
             if token.lexeme.starts(with: "0b") {
-                let literal = String(token.lexeme.dropFirst(2))
-                if let value = Int64(literal, radix: 2) {
+                let lexeme = token.lexeme.dropFirst(2).replacingOccurrences(of: "_", with: "")
+                if let value = Int64(lexeme, radix: 2) {
                     return LiteralExpr(Double(value))
                 }
             } else if token.lexeme.starts(with: "0o") {
-                let literal = String(token.lexeme.dropFirst(2))
-                if let value = Int64(literal, radix: 8) {
+                let lexeme = token.lexeme.dropFirst(2).replacingOccurrences(of: "_", with: "")
+                if let value = Int64(lexeme, radix: 8) {
                     return LiteralExpr(Double(value))
                 }
             } else if token.lexeme.starts(with: "0d") {
-                let literal = String(token.lexeme.dropFirst(2))
-                if let value = Int64(literal, radix: 10) {
+                let lexeme = token.lexeme.dropFirst(2).replacingOccurrences(of: "_", with: "")
+                if let value = Int64(lexeme, radix: 10) {
                     return LiteralExpr(Double(value))
                 }
             } else if token.lexeme.starts(with: "0x") {
-                let literal = String(token.lexeme.dropFirst(2))
-                if let value = Int64(literal, radix: 16) {
+                let lexeme = token.lexeme.dropFirst(2).replacingOccurrences(of: "_", with: "")
+                if let value = Int64(lexeme, radix: 16) {
                     return LiteralExpr(Double(value))
                 }
             } else {
-                if let value = Int64(token.lexeme) {
+                if let value = Int64(token.lexeme.replacingOccurrences(of: "_", with: "")) {
                     return LiteralExpr(Double(value))
                 }
             }
@@ -172,9 +172,9 @@ class Parser {
         throw CalcLangError.syntaxError(token.offset, token.lexeme, "Expected an expression.")
     }
 
-    // ---------------------------------------------------------------------
+    // ---------------------------------
     // Helpers.
-    // ---------------------------------------------------------------------
+    // ---------------------------------
 
     private func match(_ types: TokenType...) -> Bool {
         if isAtEnd() {

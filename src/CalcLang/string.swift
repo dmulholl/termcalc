@@ -23,51 +23,34 @@ extension String {
 extension String {
 
     func isAlpha() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: CharacterSet.letters.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: CharacterSet.letters.inverted) == nil
     }
 
     func isDecimal() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
     }
 
     func isAlphanumeric() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) == nil
     }
 
     func isValidIdentfier() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: identifierCharacters.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: identifierCharacters.inverted) == nil
     }
 
     func isWhitespace() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(
-                from: CharacterSet.whitespacesAndNewlines.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted) == nil
     }
 
     func isBinary() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: binaryCharacters.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: binaryCharacters.inverted) == nil
     }
 
     func isOctal() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: octalCharacters.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: octalCharacters.inverted) == nil
     }
 
     func isHex() -> Bool {
-        return
-            !isEmpty &&
-            rangeOfCharacter(from: hexCharacters.inverted) == nil
+        return !isEmpty && rangeOfCharacter(from: hexCharacters.inverted) == nil
     }
 }
