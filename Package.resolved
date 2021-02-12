@@ -9,6 +9,15 @@
           "revision": "dd06394bfeb2bf0257811c5ee5cb6d9eecf5da3a",
           "version": "2.0.0"
         }
+      },
+      {
+        "package": "TermUtils",
+        "repositoryURL": "/Users/dmulholl/dev/src/termutils",
+        "state": {
+          "branch": null,
+          "revision": "ab1a114c3e0bd322f1596c86bb07d7e32fe386d3",
+          "version": "0.1.0"
+        }
       }
     ]
   },

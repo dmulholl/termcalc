@@ -13,6 +13,10 @@ let package = Package(
             url: "https://github.com/dmulholl/argparser.git",
             from: "2.0.0"
         ),
+        .package(
+            url: "../termutils",
+            from: "0.1.0"
+        ),
     ],
     targets: [
         .target(
@@ -21,9 +25,9 @@ let package = Package(
         .target(
             name: "TermCalc",
             dependencies: ["CalcLang", "ArgParser", "TermUtils"]),
-        .target(
-            name: "TermUtils",
-            dependencies: []),
+        // .target(
+        //     name: "TermUtils",
+        //     dependencies: []),
         .testTarget(
             name: "CalcLangTests",
             dependencies: ["CalcLang"]),
