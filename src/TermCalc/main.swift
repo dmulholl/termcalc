@@ -4,7 +4,7 @@ import TermUtils
 import ArgParser
 
 
-let version = "2.0.0.dev"
+let version = "1.2.0"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
@@ -25,15 +25,15 @@ Flags:
   -v, --version             Print the version number and exit.
 
 Functions:
-  arccos(x)                 Inverse cosine of x; result in radians.
-  arccosd(x)                Inverse cosine of x; result in degrees.
-  arcsin(x)                 Inverse sine of x; result in radians.
-  arcsind(x)                Inverse sine of x; result in degrees.
-  arctan(x)                 Inverse tangent of x; result in radians.
-  arctan(x,y)               Inverse tangent of y/x; result in radians, sign
+  acos(x)                   Inverse cosine of x; result in radians.
+  acosd(x)                  Inverse cosine of x; result in degrees.
+  asin(x)                   Inverse sine of x; result in radians.
+  asind(x)                  Inverse sine of x; result in degrees.
+  atan(x)                   Inverse tangent of x; result in radians.
+  atan(x,y)                 Inverse tangent of y/x; result in radians, sign
                             determined by the quadrant of (x,y).
-  arctand(x)                Inverse tangent of x; result in degrees.
-  arctand(x,y)              Inverse tangent of y/x; result in degrees, sign
+  atand(x)                  Inverse tangent of x; result in degrees.
+  atand(x,y)                Inverse tangent of y/x; result in degrees, sign
                             determined by the quadrant of (x,y).
   cbrt(x)                   Cube root of x.
   cos(x)                    Cosine of x; x in radians.
