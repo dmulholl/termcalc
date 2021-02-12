@@ -142,4 +142,3 @@ while true {
 }
 
 term.writeln("─", color: .brightBlack, times: cols)
-
