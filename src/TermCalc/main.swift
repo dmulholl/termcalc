@@ -4,7 +4,7 @@ import TermUtils
 import ArgParser
 
 
-let version = "1.2.0"
+let version = "1.3.0"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
@@ -86,8 +86,8 @@ term.writeln("─", color: .brightBlack, times: cols)
 term.write("  ··  ", color: .brightBlack)
 term.write("Terminal Calculator")
 term.write("  ··", color: .brightBlack)
-term.write(" ", times: cols - 58)
-term.writeln("Type 'q' or 'quit' to exit.", color: .brightBlack)
+term.write(" ", times: cols - 56)
+term.writeln("Ctrl-C or 'exit' to quit.", color: .brightBlack)
 term.writeln("─", color: .brightBlack, times: cols)
 
 while true {
@@ -97,7 +97,7 @@ while true {
         if input.trimmingCharacters(in: .whitespaces).isEmpty {
             continue
         }
-        if input == "q" || input == "quit" {
+        if input == "exit" {
             break
         }
         term.addHistoryItem(input)
@@ -129,10 +129,7 @@ while true {
         term.writeln("^", color: .red, times: lexeme.count)
         term.write("  !>  ", color: .brightBlack)
         term.writeln("Error: \(message)\n")
-    } catch TermUtilsError.eof {
-        print()
-        break
-    } catch TermUtilsError.ctrl_c {
+    } catch TermUtilsError.eof, TermUtilsError.ctrl_c {
         print()
         break
     } catch {
