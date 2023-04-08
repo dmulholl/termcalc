@@ -12,16 +12,16 @@
       },
       {
         "package": "CalcLang",
-        "repositoryURL": "/Users/dmulholl/dev/src/calclang",
+        "repositoryURL": "https://github.com/dmulholl/calclang.git",
         "state": {
           "branch": null,
-          "revision": "7d138a182398a8dd2e3ae5bb577a32af45db94cb",
-          "version": "1.0.0"
+          "revision": "aed6a38e5f2252ed9d197b515c8d0cb962714d23",
+          "version": "0.1.0"
         }
       },
       {
         "package": "TermUtils",
-        "repositoryURL": "/Users/dmulholl/dev/src/termutils",
+        "repositoryURL": "https://github.com/dmulholl/termutils.git",
         "state": {
           "branch": null,
           "revision": "ab1a114c3e0bd322f1596c86bb07d7e32fe386d3",

@@ -4,7 +4,7 @@ import TermUtils
 import ArgParser
 
 
-let version = "1.3.0"
+let version = "1.3.1"
 let binary = (CommandLine.arguments[0] as NSString).lastPathComponent
 
 
@@ -84,9 +84,9 @@ let cols = term.width() ?? 80
 
 term.writeln("─", color: .brightBlack, times: cols)
 term.write("  ··  ", color: .brightBlack)
-term.write("Terminal Calculator")
+term.write("TermCalc")
 term.write("  ··", color: .brightBlack)
-term.write(" ", times: cols - 56)
+term.write(" ", times: cols - 45)
 term.writeln("Ctrl-C or 'exit' to quit.", color: .brightBlack)
 term.writeln("─", color: .brightBlack, times: cols)
 
