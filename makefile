@@ -1,3 +1,6 @@
+help:
+	@cat ./makefile
+
 all:
 	@make release
 	@make debug
@@ -10,3 +13,8 @@ release:
 
 install:
 	cp -f .build/release/termcalc /usr/local/bin/termcalc
+
+clean:
+	rm -rf ./build
+	rm -rf ./dist
+	rm -rf ./*.egg-info
